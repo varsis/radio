@@ -1,15 +1,13 @@
-doctype 5
-html(lang='en')
-  head
-    meta(charset='UTF-8')
-    meta(name='viewport', content='width=device-width')
-    title= title
-    block css
-      link(rel='stylesheet', href='/css/normalize.css')
-      link(rel='stylesheet', href='/css/style.css')
-    block js
-      script(src='http://localhost:35729/livereload.js')
-    block favicon
-      link(rel='shortcut icon', href='/img/favicon.ico')
+doctype html
+html(lang='en', xmlns='http://www.w3.org/1999/xhtml', xmlns:fb='https://www.facebook.com/2008/fbml', itemscope='itemscope', itemtype='http://schema.org/Product')
+  include includes/head
   body
-    block content 
+    #wrap
+      include includes/header
+      .container
+        .main-content
+          .main-head
+            block main
+          block content
+    include includes/footer
+    include includes/foot

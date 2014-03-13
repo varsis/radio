@@ -5,8 +5,17 @@ module.exports = function(app){
 	var home = require('../app/controllers/home');
     var login = require('../app/controllers/login');
 
- function loggedIn(req, res, next) {
-     console.log(req.session);
+
+    // Check if the user is logged in other wise redirect user
+function loggedIn(req, res, next) {
+
+ // already logged in and login page, redirect to main page
+if(req.session.passport.user !== undefined && req.path == '/login') {
+    res.redirect('/');
+    return;
+}
+
+// logged in and either login, or not
       if (req.session.passport.user !== undefined || req.path == '/login') {
        next();
      } else {
