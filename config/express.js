@@ -46,6 +46,12 @@ passport.serializeUser(function(user, done) {
 }));
         app.use(passport.initialize());
         app.use(passport.session());
+        
+app.use(function(req, res, next){
+    res.locals.user = req.session.passport.user;
+    next();
+  });
+
         app.use(app.router);
 
 

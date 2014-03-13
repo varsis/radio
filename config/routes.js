@@ -8,7 +8,7 @@ module.exports = function(app){
 
     // Check if the user is logged in other wise redirect user
 function loggedIn(req, res, next) {
-
+res.user = 'TEST';
  // already logged in and login page, redirect to main page
 if(req.session.passport.user !== undefined && req.path == '/login') {
     res.redirect('/');
