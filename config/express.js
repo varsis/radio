@@ -16,23 +16,15 @@ module.exports = function(app, config) {
     app.use(express.logger('dev'));
     app.use(express.bodyParser());
     app.use(express.methodOverride());
- function loggedIn(req, res, next) {
-     if(req.path != '/login') {
-      if (req.user) {
-       next();
-     } else {
-       res.redirect('/login');
-      } } else {
-          next();
-      }}
 
-    app.use(loggedIn);
+passport.deserializeUser(function(user, done) {
+    done(null, user);
+});
 
-
-    passport.use(new LocalStrategy(
-  function(username, passwordin, done) {
-    User.find({user_name: username} , function (err, user) {
-    
+passport.use(new LocalStrategy(
+    function(username, passwordin, done) {
+    User.find({user_name: username, password: passwordin} ,
+        function (err, user) {
       if (err || user.length == 0) { 
           return done(err);
       }
@@ -42,13 +34,7 @@ module.exports = function(app, config) {
 ));
 
 passport.serializeUser(function(user, done) {
-  done(null, user.user_name);
-});
-
-passport.deserializeUser(function(username, done) {
-  User.find({user_name: username}, function (err, user) {
-    done(err, user);
-  });
+  done(null, user);
 });
 
 

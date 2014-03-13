@@ -5,11 +5,4 @@ var passport = require('passport');
 
 exports.index = function(req, res){
         res.render('login/index');
-
-  Person.find(function(err, persons,users){
-    if(err) throw new Error(err);
- 
-  });
-
-
 };
