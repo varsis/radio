@@ -1,0 +1,17 @@
+extends ../layout
+
+block content 
+  div.main
+    h1 Welcome to #{title}
+    p I'm using generator-express MVC!
+        p #{text}
+        p #{persons}
+    table
+        thead
+                tr
+                        th PERSON NAME
+        tbody
+                each person, i in persons
+                        tr 
+                                td #{person.last_name}
+

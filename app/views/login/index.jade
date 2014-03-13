@@ -1,0 +1,18 @@
+extends ../layout
+
+block content 
+    div.main
+      form(action='/login',method='post')
+        p.col-sm-offset-2.error= message
+        .form-group
+         label.col-sm-2.control-label(for="email") Email
+         .col-sm-10
+         input#email.form-control(type="email", placeholder="Email", name="username")
+        .form-group
+        label.col-sm-2.control-label(for="password") Password
+        .col-sm-10
+          input#password.form-control(type="password", placeholder="Password", name="password")
+        .form-group
+        .col-sm-offset-2.col-sm-10
+         button.btn.btn-primary(type='submit') Log in
+
