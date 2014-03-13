@@ -13,10 +13,13 @@ module.exports = function(app){
        res.redirect('/login');
       } 
  }
-
-
-
+    
+    // Check for all paths if user is logged in.
     app.all('*', loggedIn);
+
+    // We can use something like this for checking path
+    //app.all('/path/*', authAdmin);
+
     
 	app.get('/', home.index);
     app.get('/login', login.index);
