@@ -1,0 +1,10 @@
+extends ../layout
+
+block content 
+    div.col-sm-3
+    div.col-sm-6.top-buffer
+        div(class='panel panel-primary')
+            div.panel-heading 
+                h3.panel-title Edit your profile, #{title}
+            div.panel-body
+                This is the Users Name: #{user.person_id}                

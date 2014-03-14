@@ -49,6 +49,7 @@ passport.serializeUser(function(user, done) {
         
 app.use(function(req, res, next){
     res.locals.user = req.session.passport.user;
+    res.locals.path = req.path;
     next();
   });
 

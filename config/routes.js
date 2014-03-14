@@ -4,6 +4,8 @@ module.exports = function(app){
 	//home route
 	var home = require('../app/controllers/home');
     var login = require('../app/controllers/login');
+    var user = require('../app/controllers/user');
+
 
 
     // Check if the user is logged in other wise redirect user
@@ -32,8 +34,13 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
     
 	app.get('/', home.index);
     app.get('/login', login.index);
+    app.get('/logout', login.logout);
     //app.post('/login', login.login);
     app.post('/login', passport.authenticate('local', { successRedirect: '/',
                                    failureRedirect: '/login',
                                    failureFlash: true }));
+
+   app.param('username', user.username);
+    app.get('/user/:username', user.index);
+
 };

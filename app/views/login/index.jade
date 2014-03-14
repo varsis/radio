@@ -1,19 +1,24 @@
 extends ../layout
 
 block content 
-    div.main
-        h1 Login for access
-        form(action='/login',method='post')
-            p.col-sm-offset-2.error= message
-            .form-group
-            label.col-sm-2.control-label(for="email") Username
-            .col-sm-10
-            input#email.form-control(type="username", placeholder="Username", name="username")
-            .form-group
-            label.col-sm-2.control-label(for="password") Password
-            .col-sm-10
-            input#password.form-control(type="password", placeholder="Password", name="password")
-            .form-group
-            .col-sm-offset-2.col-sm-10
-            button.btn.btn-primary(type='submit') Log in
-
+    div.col-sm-4
+    div.col-sm-4.top-buffer
+        div(class='panel panel-primary')
+            div.panel-heading 
+                h3.panel-title Please sign in
+            div.panel-body
+                form(action='/login',method='post')
+                    
+                    p.col-sm-offset-2.error= message
+                    .form-group
+                    label.col-sm-2.control-label(for="email") Username
+                    .col-sm-10
+                    input#email.form-control(type="username", placeholder="Username", name="username")
+                    .form-group
+                    label.col-sm-2.control-label(for="password") Password
+                    .col-sm-10
+                    input#password.form-control(type="password", placeholder="Password", name="password")
+                    .form-group
+                    .col-sm-offset-2.col-sm-10
+                    button.btn.btn-primary(type='submit') Log in
+                
