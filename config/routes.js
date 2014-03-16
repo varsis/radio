@@ -40,6 +40,7 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
                                    failureRedirect: '/login',
                                    failureFlash: true }));
 
+    app.get('/profile', user.profile, user.personInfo);
    app.param('username', user.username);
     app.get('/user/:username', user.index);
 

@@ -23,3 +23,27 @@ exports.username = function(req,res,next,username) {
          }
     });
 };
+
+exports.profile = function(req,res,next) {
+    User.get(res.locals.user.user_name,function(err,user){
+
+        // TODO: add functionality for ADMIN user(s).
+         if(err && err.msg != 'Not found') {
+             res.status(404);
+             throw new Error(err);
+         } 
+         req.user = user;
+         next();
+    });
+};
+
+exports.personInfo = function(req,res) {
+    Person.get(res.locals.user.person_id,function(err,person) {
+         if(err && err.msg != 'Not found') {
+             res.status(404);
+             throw new Error(err);
+         } 
+         var user = req.user;
+         res.render('user/index',{ title: user.user_name, user: user, person: person });
+    });
+}

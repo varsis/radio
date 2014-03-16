@@ -19,7 +19,7 @@ div.navbar.navbar-inverse.navbar-fixed-top(role='navigation')
             a(href="#", title="Profile") Upload Images
           - if (locals.user !== undefined)
            li
-            a(href="/user/"+locals.user.user_name, title="Profile") Profile
+            a(href="/profile", title="Profile") Profile
            li
             a(href="/logout", title="Logout") Logout
           - else
