@@ -8,32 +8,30 @@ block content
                 h3.panel-title Edit your profile, #{title}
             div.panel-body
                 form(action='/profile',method='post')
-                    This is the Users Name: #{user.person_id} 
-                    .col-sm-10
                     .form-group
-                    label.col-sm-2.control-label(for="email") Password
-                    .col-sm-10
-                    input#email.form-control(type="username", placeholder=user.password, name="password") 
+                        label.col-sm-2.control-label(for="password") Password
+                        .col-sm-10
+                        input#email.form-control(type="username", placeholder=user.password, name="password") 
                     .form-group
-                    label.col-sm-2.control-label(for="email") Firstname
-                    .col-sm-10
-                    input#email.form-control(type="username", placeholder=person.first_name, name="firstname") 
+                        label.col-sm-2.control-label(for="email") Firstname
+                        .col-sm-10
+                        input#email.form-control(type="username", placeholder=person.first_name, name="firstname") 
                     .form-group
-                    label.col-sm-2.control-label(for="email") Lastname
-                    .col-sm-10
-                    input#email.form-control(type="username", placeholder=person.last_name, name="lastname")     
+                        label.col-sm-2.control-label(for="email") Lastname
+                        .col-sm-10
+                        input#email.form-control(type="username", placeholder=person.last_name, name="lastname")     
                     .form-group
-                    label.col-sm-2.control-label(for="email") Address
-                    .col-sm-10
-                    input#email.form-control(type="username", placeholder=person.address, name="address")          
+                        label.col-sm-2.control-label(for="email") Address
+                        .col-sm-10
+                        input#email.form-control(type="username", placeholder=person.address, name="address")          
                     .form-group
-                    label.col-sm-2.control-label(for="email") Email
-                    .col-sm-10
-                    input#email.form-control(type="username", placeholder=person.email, name="email") 
+                        label.col-sm-2.control-label(for="email") Email
+                        .col-sm-10
+                        input#email.form-control(type="username", placeholder=person.email, name="email") 
                     .form-group
-                    label.col-sm-2.control-label(for="email") Phone
-                    .col-sm-10
-                    input#email.form-control(type="username", placeholder=person.phone, name="phone") 
+                        label.col-sm-2.control-label(for="email") Phone
+                        .col-sm-10
+                        input#email.form-control(type="username", placeholder=person.phone, name="phone") 
                     .form-group
-                    .col-sm-offset-2.col-sm-10
-                    button.btn.btn-primary(type='submit') Save
+                        .col-sm-offset-2.col-sm-10
+                        button.btn.btn-primary(type='submit') Save

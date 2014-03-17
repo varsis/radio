@@ -6,6 +6,10 @@ exports.index = function(req, res){
         res.render('user/index',{title: req.user.user_name, user: req.user});
 };
 
+exports.showAll = function(req, res){
+        res.render('user/list');
+};
+
 exports.username = function(req,res,next,username) {
     User.get(username,function(err,user){
 

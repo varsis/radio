@@ -48,4 +48,5 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
     app.post('/profile', user.updateProfile);
    app.param('username', user.username);
     app.get('/user/:username', user.index);
+     app.get('/user', user.showAll);
 };
