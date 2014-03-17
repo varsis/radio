@@ -45,30 +45,36 @@ exports.updateProfile = function(req,res) {
             user.password = req.body.password;
         }
 
-        if(req.body.firstname != '') {
-            user.first_name = req.body.firstname;
-        }
-        if(req.body.lastname != '') {
-            user.last_name = req.body.lastname;
-        }
-        if(req.body.address != '') {
-            user.address= req.body.address;
-        }
-
-       if(req.body.email != '') {
-            user.email = req.body.email;
-        }
-
-       if(req.body.phone != '') {
-            user.phone = req.body.phone;
-        }
-
         user.save(function (err) {
             // err.msg = "under-age";
         });
+ });
 
+     Person.get(req.user.person_id, function (err, person) {
 
-       });
+        if(req.body.firstname != '') {
+            person.first_name = req.body.firstname;
+        }
+        if(req.body.lastname != '') {
+            person.last_name = req.body.lastname;
+        }
+        if(req.body.address != '') {
+            person.address= req.body.address;
+        }
+
+       if(req.body.email != '') {
+            person.email = req.body.email;
+        }
+
+       if(req.body.phone != '') {
+            person.phone = req.body.phone;
+        }
+
+        person.save(function (err) {
+            // err.msg = "under-age";
+        });
+     });
+
     res.redirect('/profile');
 };
 
