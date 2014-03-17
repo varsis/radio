@@ -29,7 +29,7 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
     app.all('*', loggedIn);
 
     // CHECK IF ADMIN
-    app.all('/user/*',user.isAdmin);
+    app.all('/user*',user.isAdmin);
 
 
     // We can use something like this for checking path
