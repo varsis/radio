@@ -7,33 +7,33 @@ block content
             div.panel-heading 
                 h3.panel-title Edit your profile, #{title}
             div.panel-body
-                form(action='/profile',method='post')
+                form(action='/user/edit',method='post')
                     This is the Users Name: #{user.person_id} 
                     .col-sm-10
                     .form-group
                     label.col-sm-2.control-label(for="email") Password
                     .col-sm-10
-                    input#email.form-control(type="username", placeholder=user.password, name="password") 
+                    input#email.form-control(type="username", placeholder=user.password, name="username") 
                     .form-group
                     label.col-sm-2.control-label(for="email") Firstname
                     .col-sm-10
-                    input#email.form-control(type="username", placeholder=person.first_name, name="firstname") 
+                    input#email.form-control(type="username", placeholder=person.first_name, name="username") 
                     .form-group
                     label.col-sm-2.control-label(for="email") Lastname
                     .col-sm-10
-                    input#email.form-control(type="username", placeholder=person.last_name, name="lastname")     
+                    input#email.form-control(type="username", placeholder=person.last_name, name="username")     
                     .form-group
                     label.col-sm-2.control-label(for="email") Address
                     .col-sm-10
-                    input#email.form-control(type="username", placeholder=person.address, name="address")          
+                    input#email.form-control(type="username", placeholder=person.address, name="username")          
                     .form-group
                     label.col-sm-2.control-label(for="email") Email
                     .col-sm-10
-                    input#email.form-control(type="username", placeholder=person.email, name="email") 
+                    input#email.form-control(type="username", placeholder=person.email, name="username") 
                     .form-group
                     label.col-sm-2.control-label(for="email") Phone
                     .col-sm-10
-                    input#email.form-control(type="username", placeholder=person.phone, name="phone") 
+                    input#email.form-control(type="username", placeholder=person.phone, name="username") 
                     .form-group
                     .col-sm-offset-2.col-sm-10
                     button.btn.btn-primary(type='submit') Save

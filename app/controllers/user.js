@@ -37,6 +37,41 @@ exports.profile = function(req,res,next) {
     });
 };
 
+exports.updateProfile = function(req,res) {
+
+    User.get(req.user.user_name, function (err, user) {
+    // finds person with id = 123
+        if(req.body.password != '') {
+            user.password = req.body.password;
+        }
+
+        if(req.body.firstname != '') {
+            user.first_name = req.body.firstname;
+        }
+        if(req.body.lastname != '') {
+            user.last_name = req.body.lastname;
+        }
+        if(req.body.address != '') {
+            user.address= req.body.address;
+        }
+
+       if(req.body.email != '') {
+            user.email = req.body.email;
+        }
+
+       if(req.body.phone != '') {
+            user.phone = req.body.phone;
+        }
+
+        user.save(function (err) {
+            // err.msg = "under-age";
+        });
+
+
+       });
+    res.redirect('/profile');
+};
+
 exports.personInfo = function(req,res) {
     Person.get(res.locals.user.person_id,function(err,person) {
          if(err && err.msg != 'Not found') {
@@ -46,4 +81,14 @@ exports.personInfo = function(req,res) {
          var user = req.user;
          res.render('user/index',{ title: user.user_name, user: user, person: person });
     });
-}
+};
+
+exports.isAdmin = function(req,res,next) {
+        var user = req.user;
+        if(user.class == 'a') {
+            console.log("%s class",user.class);
+            next();
+        } else {
+            res.render('user/unauthorized');
+        }
+};

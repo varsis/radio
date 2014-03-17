@@ -28,6 +28,10 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
     // Check for all paths if user is logged in.
     app.all('*', loggedIn);
 
+    // CHECK IF ADMIN
+    app.all('/user/*',user.isAdmin);
+
+
     // We can use something like this for checking path
     //app.all('/path/*', authAdmin);
 
@@ -41,7 +45,7 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
                                    failureFlash: true }));
 
     app.get('/profile', user.profile, user.personInfo);
+    app.post('/profile', user.updateProfile);
    app.param('username', user.username);
     app.get('/user/:username', user.index);
-
 };

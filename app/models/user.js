@@ -5,7 +5,7 @@ var db = require('orm').db;
 var User = db.define('users', {
         user_name: String,
         password: String,
-        class: String,
+        'class': String,
         person_id: Number,
         date_registered: Date
 }, {
