@@ -89,6 +89,12 @@ exports.personInfo = function(req,res) {
         if (err) throw err;
         console.log(doctors);
                 });
+
+          person.getRecords(function (err, doctors) {
+        if (err) throw err;
+        console.log(doctors);
+                });
+
          if(err && err.msg != 'Not found') {
              res.status(404);
              throw new Error(err);
