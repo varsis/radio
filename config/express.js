@@ -2,8 +2,11 @@ var express = require('express');
 
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
-  var db = require('orm').db,
-    User = db.models.users;
+  var db = require('orm').db;
+
+User = db.models.users;
+Person = db.models.persons;
+
 
 module.exports = function(app, config) {
   app.configure(function () {

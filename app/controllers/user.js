@@ -84,6 +84,11 @@ exports.updateProfile = function(req,res) {
 
 exports.personInfo = function(req,res) {
     Person.get(res.locals.user.person_id,function(err,person) {
+
+     person.getDoctors(function (err, doctors) {
+        if (err) throw err;
+        console.log(doctors);
+                });
          if(err && err.msg != 'Not found') {
              res.status(404);
              throw new Error(err);

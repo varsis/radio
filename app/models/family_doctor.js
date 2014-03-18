@@ -14,4 +14,3 @@ var family_doctor = db.define('family_doctor', {
     }
   }
 });
-

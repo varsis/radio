@@ -2,6 +2,7 @@
 
 var db = require('orm').db;
 
+
 var Person = db.define('persons', {
         person_id: Number,
         first_name: String,
@@ -18,4 +19,13 @@ var Person = db.define('persons', {
     }
   }
 });
+
+
+Person.hasMany('doctors', Person, {}, {
+    reverse: 'doctor',
+    mergeTable: 'family_doctor',
+    mergeId: 'patient_id',
+    mergeAssocId: 'doctor_id'
+});
+
 

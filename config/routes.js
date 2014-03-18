@@ -1,12 +1,10 @@
 var passport = require('passport');
-
+var db = require('orm').db;
 module.exports = function(app){
 	//home route
 	var home = require('../app/controllers/home');
     var login = require('../app/controllers/login');
     var user = require('../app/controllers/user');
-
-
 
     // Check if the user is logged in other wise redirect user
 function loggedIn(req, res, next) {
