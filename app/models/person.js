@@ -20,7 +20,6 @@ var Person = db.define('persons', {
   }
 });
 
-var Record = db.models.radiology_record;
 
 Person.hasMany('doctors', Person, {}, {
     reverse: 'doctor',
@@ -29,9 +28,6 @@ Person.hasMany('doctors', Person, {}, {
     mergeAssocId: 'doctor_id'
 });
 
-Person.hasMany('records', Record, {}, {
-    mergeTable: 'radiology_record',
-    mergeId: 'patient_id',
-    mergeAssocId: 'record_id'
-});
+
+
 

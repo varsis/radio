@@ -7,7 +7,10 @@ exports.index = function(req, res){
 };
 
 exports.showAll = function(req, res){
-        res.render('user/list');
+    Person.all(function(err,persons) {
+        console.log(persons);
+        res.render('user/list',{persons: persons});
+    });
 };
 
 exports.username = function(req,res,next,username) {
@@ -90,9 +93,9 @@ exports.personInfo = function(req,res) {
         console.log(doctors);
                 });
 
-          person.getRecords(function (err, doctors) {
+          person.getRecords(function (err, records) {
         if (err) throw err;
-        console.log(doctors);
+        console.log(records);
                 });
 
          if(err && err.msg != 'Not found') {
