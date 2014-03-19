@@ -7,6 +7,9 @@ module.exports = function(app){
     var user = require('../app/controllers/user');
     var person = require('../app/controllers/person');
     var upload = require('../app/controllers/upload');
+    var search = require('../app/controllers/search');
+    var reports = require('../app/controllers/reports');
+    var analysis = require('../app/controllers/analysis');
 
     // Check if the user is logged in other wise redirect user
 function loggedIn(req, res, next) {
