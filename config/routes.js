@@ -6,6 +6,7 @@ module.exports = function(app){
     var login = require('../app/controllers/login');
     var user = require('../app/controllers/user');
     var person = require('../app/controllers/person');
+    var upload = require('../app/controllers/upload');
 
     // Check if the user is logged in other wise redirect user
 function loggedIn(req, res, next) {
@@ -53,4 +54,14 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
    app.param('username', user.username);
     app.post('/user/:username', user.update);
      app.get('/user', user.showAll);
+
+    app.get('/upload', upload.index);
+
+    app.get('/search', search.index);
+
+    app.get('/analysis', analysis.index);
+
+    app.get('/reports', reports.index);
+
+
 };

@@ -13,13 +13,13 @@ div.navbar.navbar-inverse.navbar-fixed-top(role='navigation')
            li
              a(href="/user", title="Manage Users" ) Manage Users
            li
-            a(href="#", title="Profile") Reports
+            a(href="/reports", title="Reports") Reports
           li
-            a(href="#", title="Profile") Analysis
+            a(href="/analysis", title="Analysis") Analysis
           li
-            a(href="#", title="Profile") Search
+            a(href="/search", title="Search") Search
           li
-            a(href="#", title="Profile") Upload Images
+            a(href="/upload", title="Upload Images") Upload Images
           - if (locals.user !== undefined)
            li
             a(href="/profile", title="Profile") Profile
