@@ -4,8 +4,25 @@ var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
   var db = require('orm').db;
 
-User = db.models.users;
-Person = db.models.persons;
+var User = db.models.users;
+var Person = db.models.persons;
+var Record = db.models.radiology_record;
+
+Person.hasMany('users', User ,{
+}, {
+    autoFetch: true,
+    mergeTable: 'users',
+    mergeId: 'person_id',
+    mergeAssocId: 'user_name'
+
+});
+
+Person.hasMany('records', Record, { }, {
+    autoFetch: true,
+    mergeTable: 'radiology_record',
+    mergeId: 'patient_id',
+    mergeAssocId: 'record_id'
+});
 
 
 module.exports = function(app, config) {

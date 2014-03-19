@@ -1,32 +1,83 @@
 extends ../layout
 
 block content 
-    div.col-sm-2
-    div.col-sm-8.top-buffer
-        div(class='panel panel-primary')
+      each person, i in persons
+        div(class='panel panel-primary top-buffer')
             div.panel-heading 
-                h3.panel-title All Users here.
+                h3.panel-title #{person.last_name},#{person.first_name}               
             div.panel-body
-                Display a list of users here...
                 div.table-responsive
-                    table(class='table table-striped')
-                        thead
+                  table(class='table')
+                    thead                             
+                            tr 
+                                th Id
+                                th First Name
+                                th Last Name
+                                th Address
+                                th Email
+                                th Phone
+                                th Save
+
+                    tbody
+                        form(action='/profile/'+person.person_id,method='post')
+                            tr.form-group  
+                                td #{person.person_id}
+                                td 
+                                    input.form-control.input-sm(type="text", placeholder=person.first_name, name="first_name") 
+                                td 
+                                    input.form-control.input-sm(type="text", placeholder=person.last_name, name="last_name") 
+                                td 
+                                    input.form-control.input-sm(type="text", placeholder=person.address, name="address")
+                                td
+                                    input.form-control.input-sm(type="text", placeholder=person.email, name="email") 
+
+                                td 
+                                    input.form-control.input-sm(type="text", placeholder=person.phone, name="phone") 
+                                td(width="40")  
+                                    button.btn.btn-primary.btn-sm(href="/user/"+user.user_name) Save
+
+                                
+                 div.table-responsive
+                      table(class='table table-striped')
+                         thead
+
                             tr
-                                th user id
-                                th row
-                                th row
-                                th row
-                                th row
-                        tbody
-                            tr 
-                                td 1
-                                td 2
-                                td 3
-                                td 4
-                                td edit user
-                            tr 
-                                td 1
-                                td 2
-                                td 3
-                                td 4
-                                td 5
+                                th Username
+                                th Password
+                                th Type
+                                th(colspan="3") Date Registered
+                                th Save
+
+                         tbody
+                         each user, i in person.users
+                            tr
+                                td #{user.user_name}
+                                td 
+                                    input.form-control.input-sm(type="text", placeholder=user.password, name="password") 
+                                td 
+                                    input.form-control.input-sm(type="text", placeholder=user.class, name="class") 
+                                td(colspan="3") 
+                                    input.form-control.input-sm(type="text", placeholder=user.date_registered, name="date_registered") 
+                                td(width="40")  
+                                    button.btn.btn-primary.btn-sm(href="/user/"+user.user_name) Save
+                each doctor, i in person.doctors
+                    div.table-responsive
+                      table(class='table table-striped')
+                         thead
+
+                            tr
+                                th Doctors
+                                th Remove
+                         tbody
+
+                                td #{doctor.last_name}, #{doctor.first_name}        
+                                td 
+                                    a.btn.btn-primary.btn-sm(href="/patient/remove/" + person.person_id + "/" + doctor.person_id) Remove Doctor
+
+                div.row.col-sm-3
+                        select.form-control.input-sm
+                            each person, i in persons
+                                option #{person.last_name}, #{person.first_name}
+                    div.col-sm-2
+                        button.btn.btn-primary.btn-sm Add Doctor to Patient
+

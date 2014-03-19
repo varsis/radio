@@ -17,4 +17,3 @@ var User = db.define('users', {
     }
   }
 });
-

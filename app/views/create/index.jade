@@ -1,0 +1,44 @@
+extends ../layout
+
+block content 
+    div.col-sm-4
+    div.col-sm-4.top-buffer
+        div(class='panel panel-primary')
+            div.panel-heading 
+                h3.panel-title Please fill in the form 
+            div.panel-body
+                form(action='/login',method='post')
+                    
+                    p.col-sm-offset-2.error= message
+                    .form-group
+                    label.col-sm-2.control-label(for="email") Username
+                    .col-sm-10
+                    input#email.form-control(type="username", placeholder="Username", name="username")
+                    .form-group
+                    label.col-sm-2.control-label(for="password") Password
+                    .col-sm-10
+                    input#password.form-control(type="password", placeholder="Password", name="password")
+                    .form-group
+                    label.col-sm-2.control-label(for="password") Firstname
+                    .col-sm-10
+                    input#password.form-control(type="password", placeholder="Firstname", name="firstname")
+                    .form-group
+                    label.col-sm-2.control-label(for="password") Lastname
+                    .col-sm-10
+                    input#password.form-control(type="password", placeholder="Lastname", name="lastname")
+                    .form-group
+                    label.col-sm-2.control-label(for="password") Address
+                    .col-sm-10
+                    input#password.form-control(type="password", placeholder="Address", name="address")
+                    .form-group
+                    label.col-sm-2.control-label(for="password") Email
+                    .col-sm-10
+                    input#password.form-control(type="password", placeholder="Email", name="email")
+                    .form-group
+                    label.col-sm-2.control-label(for="password") Phone
+                    .col-sm-10
+                    input#password.form-control(type="password", placeholder="Phone", name="phone")
+                    .form-group
+                    .col-sm-offset-2.col-sm-10
+                    button.btn.btn-primary(type='submit') Log in
+                
