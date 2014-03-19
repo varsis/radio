@@ -85,6 +85,32 @@ exports.updateProfile = function(req,res) {
     res.redirect('/profile');
 };
 
+
+exports.update = function(req,res) {
+
+    User.get(req.user.user_name, function (err, user) {
+    // finds person with id = 123
+        if(req.body.password != '') {
+            user.password = req.body.password;
+        }
+
+        if(req.body.class != '') {
+            user.class = req.body.class;
+        }
+
+        if(req.body.date_registered != '') {
+            user.date_registered = req.body.date_registered;
+        }
+
+        user.save(function (err) {
+            // err.msg = "under-age";
+        });
+ });
+
+       res.redirect('/user');
+};
+
+
 exports.personInfo = function(req,res) {
     Person.get(res.locals.user.person_id,function(err,person) {
 
