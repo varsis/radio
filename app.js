@@ -4,6 +4,7 @@ var express = require('express'),
   fs = require('fs'),
   config = require('./config/config');
 
+orm.settings.set("instance.cache", false);
 orm.db = orm.connect(config.db, function(err, db){
   if(err){
     console.log("Something is wrong with the connection", err);

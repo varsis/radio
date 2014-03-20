@@ -1,6 +1,39 @@
 extends ../layout
 
 block content 
+    div(class='panel panel-primary top-buffer')
+        div.panel-heading 
+            h3.panel-title Add new person           
+        div.panel-body
+                div.table-responsive 
+                    table(class='table')
+                        thead                             
+                            tr 
+                                th First Name
+                                th Last Name
+                                th Address
+                                th Email
+                                th Phone
+                                th New
+
+                        tbody
+                            form(action='/admin/person/add',method='post')
+                                tr.form-group  
+                                    td 
+                                        input.form-control.input-sm(type="text", placeholder='Firstname', name="firstname") 
+                                    td 
+                                        input.form-control.input-sm(type="text", placeholder='Lastname', name="lastname") 
+                                    td 
+                                        input.form-control.input-sm(type="text", placeholder='Address', name="address")
+                                    td
+                                        input.form-control.input-sm(type="text", placeholder='Email', name="email") 
+
+                                    td 
+                                        input.form-control.input-sm(type="text", placeholder='Phone', name="phone") 
+                                    td(width="40")  
+                                        button.btn.btn-primary.btn-sm(type='submit') New
+
+
       each person, i in persons
         div(class='panel panel-primary top-buffer')
             div.panel-heading 
@@ -19,13 +52,14 @@ block content
                                 th Save
 
                     tbody
-                        form(action='/person/'+person.person_id,method='post')
+                        form(action='/admin/person/update',method='post')
                             tr.form-group  
                                 td #{person.person_id}
+                                    input(type='hidden',value=person.person_id,name='personid')
                                 td 
-                                    input.form-control.input-sm(type="text", placeholder=person.first_name, name="first_name") 
+                                    input.form-control.input-sm(type="text", placeholder=person.first_name, name="firstname") 
                                 td 
-                                    input.form-control.input-sm(type="text", placeholder=person.last_name, name="last_name") 
+                                    input.form-control.input-sm(type="text", placeholder=person.last_name, name="lastname") 
                                 td 
                                     input.form-control.input-sm(type="text", placeholder=person.address, name="address")
                                 td
@@ -34,7 +68,7 @@ block content
                                 td 
                                     input.form-control.input-sm(type="text", placeholder=person.phone, name="phone") 
                                 td(width="40")  
-                                    button.btn.btn-primary.btn-sm(href="/user/"+user.user_name) Save
+                                    button.btn.btn-primary.btn-sm(type='submit') Save
 
                                 
                  div.table-responsive
@@ -42,42 +76,65 @@ block content
                          thead
 
                             tr
-                                th Username
+                                th(width="180") Username
                                 th Password
-                                th Type
+                                th(width='100')  Type
                                 th(colspan="3") Date Registered
                                 th Save
 
                          tbody
-                         each user, i in person.users
-                            tr
+                           each user, i in person.users
+                            form(action='/admin/user/update',method='post')
+                              tr.form-group
                                 td #{user.user_name}
                                 td 
                                     input.form-control.input-sm(type="text", placeholder=user.password, name="password") 
                                 td 
                                     input.form-control.input-sm(type="text", placeholder=user.class, name="class") 
                                 td(colspan="3") 
-                                    input.form-control.input-sm(type="text", placeholder=user.date_registered, name="date_registered") 
+                                    input.form-control.input-sm(type="text", placeholder=user.date_registered, name="dateregistered") 
                                 td(width="40")  
-                                    button.btn.btn-primary.btn-sm(href="/user/"+user.user_name) Save
-                each doctor, i in person.doctors
+                                    button.btn.btn-primary.btn-sm(type='submit') Save
+
+                         form(action='/admin/user/add',method='post')
+                            tr.form-group
+                                td 
+                                    input.form-control.input-sm(type="text", placeholder='username', name="username") 
+                                td 
+                                    input.form-control.input-sm(type="text", placeholder='password', name="password") 
+                                td(colspan="3")
+                                    input.form-control.input-sm(type="text", placeholder='class', name="class") 
+                                td.text-center Date will be filled automatically
+                                td(width="40")  
+                                    input(type='hidden',value=person.person_id,name='personid')
+                                    button.btn.btn-primary.btn-sm.pull-right(type='submit') New
+
+
                     div.table-responsive
                       table(class='table table-striped')
                          thead
-
+        
                             tr
                                 th Doctors
                                 th Remove
                          tbody
-
+                           each doctor, i in person.doctors
+                            form(action='/admin/person/removedoc',method='post')
+                              tr.form-group  
                                 td #{doctor.last_name}, #{doctor.first_name}        
                                 td 
-                                    a.btn.btn-primary.btn-sm(href="/patient/remove/" + person.person_id + "/" + doctor.person_id) Remove Doctor
+                                    input(type='hidden', value=doctor.person_id,name="doctorid")
+                                    input(type='hidden', value=person.person_id,name="personid")
+                                    button.btn.btn-primary.btn-sm(type='submit') Remove Doctor
 
-                div.row.col-sm-3
-                        select.form-control.input-sm
-                            each person, i in persons
-                                option #{person.last_name}, #{person.first_name}
+                div
+                  form(action='/admin/person/adddoc',method='post')
+                    div.col-sm-3
+                        select.form-control.input-sm(name='doctorid')
+                            each doctor, i in persons
+                                - if(doctor.person_id != person.person_id)
+                                 option(value=doctor.person_id) #{doctor.last_name}, #{doctor.first_name}
                     div.col-sm-2
-                        button.btn.btn-primary.btn-sm Add Doctor to Patient
+                        input(type='hidden', value=person.person_id,name="personid")
+                        button.btn.btn-primary.btn-sm(type='submit') Add Doctor to Patient
 

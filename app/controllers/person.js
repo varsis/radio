@@ -1,5 +1,6 @@
 var db = require('orm').db,
- Person = db.models.persons;
+ Person = db.models.persons,
+ FamilyDoctor = db.models.family_doctor;
 
 
 exports.person_id = function(req,res,next,person_id) {
@@ -16,9 +17,7 @@ exports.person_id = function(req,res,next,person_id) {
 };
 
 exports.update = function(req,res) {
-
-     Person.get(req.person.person_id, function (err, person) {
-
+    Person.get(req.body.personid, function (err, person) {
         if(req.body.firstname != '') {
             person.first_name = req.body.firstname;
         }
@@ -38,10 +37,57 @@ exports.update = function(req,res) {
         }
 
         person.save(function (err) {
+            console.log('ERROR');
             // err.msg = "under-age";
         });
      });
 
-    res.redirect('/user/');
+    res.redirect('/admin/users');
 };
+
+
+exports.add = function(req,res) {
+
+Person.aggregate(["person_id"]).max("person_id").get(function (err, max) {
+    Person.create([
+    {
+        person_id: max + 1,
+        first_name: req.body.firstname,
+        last_name: req.body.lastname,
+        address: req.body.address,
+        email: req.body.email,
+        phone: req.body.phone
+    }], function (err, items) {
+        if(err) throw (err);
+    // err - description of the error or null
+    // items - array of inserted items
+    res.redirect('/admin/users'); }) });
+}
+
+exports.adddoc = function(req,res) {
+
+    FamilyDoctor.create([ {
+        doctor_id: req.body.doctorid,
+        patient_id: req.body.personid
+    }], function (err, items) {
+        if(err) throw (err);
+    // err - description of the error or null
+    // items - array of inserted items
+    res.redirect('/admin/users');
+    }) 
+
+}
+
+exports.removedoc = function(req,res) {
+
+    FamilyDoctor.find({ doctor_id: req.body.doctorid, patient_id: req.body.personid}).remove(function (err) {
+        if(err) throw (err);
+    // err - description of the error or null
+    // items - array of inserted items
+    res.redirect('/admin/users');
+    }) 
+
+}
+
+
 

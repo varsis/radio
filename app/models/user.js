@@ -9,7 +9,8 @@ var User = db.define('users', {
         person_id: Number,
         date_registered: Date
 }, {
-    id   : "user_name"
+    id   : "user_name",
+    autoFetch: true
 } , {
   methods: {
     example: function(){

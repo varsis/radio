@@ -23,7 +23,6 @@ var Person = db.define('persons', {
 
 Person.hasMany('doctors', Person, {}, {
     autoFetch: true,
-    reverse: 'doctor',
     mergeTable: 'family_doctor',
     mergeId: 'patient_id',
     mergeAssocId: 'doctor_id'
