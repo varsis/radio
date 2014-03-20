@@ -11,6 +11,7 @@ var Record = db.models.radiology_record;
 Person.hasMany('users', User ,{
 }, {
     autoFetch: true,
+    autoSave: true,
     mergeTable: 'users',
     mergeId: 'person_id',
     mergeAssocId: 'user_name'
@@ -19,6 +20,7 @@ Person.hasMany('users', User ,{
 
 Person.hasMany('records', Record, { }, {
     autoFetch: true,
+    autoSave: true,
     mergeTable: 'radiology_record',
     mergeId: 'patient_id',
     mergeAssocId: 'record_id'

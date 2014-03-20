@@ -8,7 +8,8 @@ exports.index = function(req, res){
 
 exports.showAll = function(req, res){
     Person.all(function(err,persons) {
-        console.log(persons);
+        console.log(persons[1].users);
+
         res.render('user/list',{persons: persons});
     });
 };
@@ -22,12 +23,8 @@ exports.username = function(req,res,next,username) {
              throw new Error(err);
          } 
 
-         if(res.locals.user.user_name == username) {
             req.user = user; 
             next();
-         } else {
-            res.redirect('/user/'+ res.locals.user.user_name);
-         }
     });
 };
 
@@ -43,6 +40,46 @@ exports.profile = function(req,res,next) {
          next();
     });
 };
+
+
+exports.add = function(req,res) {
+var date;
+date = new Date();
+date = date.getUTCFullYear() + '-' +
+    ('00' + (date.getUTCMonth()+1)).slice(-2) + '-' +
+    ('00' + date.getUTCDate()).slice(-2) + ' ' + 
+    ('00' + date.getUTCHours()).slice(-2) + ':' + 
+    ('00' + date.getUTCMinutes()).slice(-2) + ':' + 
+    ('00' + date.getUTCSeconds()).slice(-2);
+
+if(req.body.username.length > 0 && req.body.password.length > 0 && req.body.class.length == 1 && req.body.personid.length > 0) {
+
+    User.create([
+    {
+        user_name: req.body.username,
+        password: req.body.password,
+        'class': req.body.class,
+        person_id: req.body.personid,
+        date_registered: date
+    }], function (err, items) {
+        if(err) throw (err);
+    // err - description of the error or null
+    // items - array of inserted items
+    res.redirect('/admin/users');
+});
+} else {
+    res.redirect('/admin/users');
+}
+};
+
+exports.remove = function(req,res){
+    User.find({ user_name: req.body.username}).remove(function (err) {
+        if(err) throw (err);
+    // err - description of the error or null
+    // items - array of inserted items
+    res.redirect('/admin/users');
+    }) 
+}
 
 exports.updateProfile = function(req,res) {
 
@@ -91,6 +128,7 @@ exports.update = function(req,res) {
     User.get(req.user.user_name, function (err, user) {
     // finds person with id = 123
         if(req.body.password != '') {
+            console.log(req.body.password);
             user.password = req.body.password;
         }
 
@@ -98,17 +136,18 @@ exports.update = function(req,res) {
             user.class = req.body.class;
         }
 
-        if(req.body.date_registered != '') {
-            user.date_registered = req.body.date_registered;
+        if(req.body.dateregistered != '') {
+            user.date_registered = req.body.dateregistered;
         }
 
         user.save(function (err) {
             // err.msg = "under-age";
+            res.redirect('/admin/users');
+
         });
  });
 
-       res.redirect('/user');
-};
+   };
 
 
 exports.personInfo = function(req,res) {

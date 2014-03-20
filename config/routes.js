@@ -32,7 +32,7 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
     app.all('*', loggedIn);
 
     // CHECK IF ADMIN
-    app.all('/user*',user.isAdmin);
+    app.all('/admin*',user.isAdmin);
 
 
     // We can use something like this for checking path
@@ -52,19 +52,23 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
 
     // Update the person profile
     app.param('person_id', person.person_id);
-    app.post('/person/:person_id', person.update);
+    app.post('/admin/person/update', person.update);
+    app.post('/admin/person/add', person.add);
 
-   app.param('username', user.username);
-    app.post('/user/:username', user.update);
-     app.get('/user', user.showAll);
+    app.post('/admin/person/adddoc', person.adddoc);
+    app.post('/admin/person/removedoc', person.removedoc);
+
+
+
+
+  // app.param('username', user.username);
+    app.post('/admin/user/update', user.update);
+     app.get('/admin/users', user.showAll);
+    app.post('/admin/user/add', user.add);
+    app.post('/admin/user/remove', user.remove);
 
     app.get('/upload', upload.index);
-
     app.get('/search', search.index);
-
     app.get('/analysis', analysis.index);
-
     app.get('/reports', reports.index);
-
-
 };
