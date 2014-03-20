@@ -51,6 +51,9 @@ date = date.getUTCFullYear() + '-' +
     ('00' + date.getUTCHours()).slice(-2) + ':' + 
     ('00' + date.getUTCMinutes()).slice(-2) + ':' + 
     ('00' + date.getUTCSeconds()).slice(-2);
+
+if(req.body.username.length > 0 && req.body.password.length > 0 && req.body.class.length == 1 && req.body.personid.length > 0) {
+
     User.create([
     {
         user_name: req.body.username,
@@ -64,7 +67,19 @@ date = date.getUTCFullYear() + '-' +
     // items - array of inserted items
     res.redirect('/admin/users');
 });
+} else {
+    res.redirect('/admin/users');
+}
 };
+
+exports.remove = function(req,res){
+    User.find({ user_name: req.body.username}).remove(function (err) {
+        if(err) throw (err);
+    // err - description of the error or null
+    // items - array of inserted items
+    res.redirect('/admin/users');
+    }) 
+}
 
 exports.updateProfile = function(req,res) {
 

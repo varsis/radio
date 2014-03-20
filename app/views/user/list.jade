@@ -3,10 +3,10 @@ extends ../layout
 block content 
     div(class='panel panel-primary top-buffer')
         div.panel-heading 
-            h3.panel-title Add new person           
+            h3.panel-title Add a new person           
         div.panel-body
                 div.table-responsive 
-                    table(class='table')
+                    table(class='table table-hover')
                         thead                             
                             tr 
                                 th First Name
@@ -31,7 +31,7 @@ block content
                                     td 
                                         input.form-control.input-sm(type="text", placeholder='Phone', name="phone") 
                                     td(width="40")  
-                                        button.btn.btn-primary.btn-sm(type='submit') New
+                                        button.btn.btn-success.btn-sm(type='submit') New
 
 
       each person, i in persons
@@ -78,10 +78,10 @@ block content
                             tr
                                 th(width="180") Username
                                 th Password
-                                th(width='100')  Type
+                                th(width='160')  Type
                                 th(colspan="3") Date Registered
                                 th Save
-
+                                th(width='40') Remove
                          tbody
                            each user, i in person.users
                             form(action='/admin/user/update',method='post')
@@ -90,11 +90,20 @@ block content
                                 td 
                                     input.form-control.input-sm(type="text", placeholder=user.password, name="password") 
                                 td 
-                                    input.form-control.input-sm(type="text", placeholder=user.class, name="class") 
+                                    select.form-control.input-sm(name="class")
+                                        - var options = [{value: 'a', label: 'Admin'}, {value: 'd', label: 'Doctor'}, {value: 'p', label: 'Patient'}, {value: 'r', label: 'Radiologist'}]
+                                        each option in options
+                                            option(value=option.value, selected=(user.class==option.value))= option.label 
                                 td(colspan="3") 
                                     input.form-control.input-sm(type="text", placeholder=user.date_registered, name="dateregistered") 
                                 td(width="40")  
                                     button.btn.btn-primary.btn-sm(type='submit') Save
+
+                                td 
+                                    form(action='/admin/user/remove',method='post')
+                                        input(type='hidden',value=user.user_name,name='username')
+                                        button.btn.btn-danger.btn-sm.pull-right(type='submit') Remove
+
 
                          form(action='/admin/user/add',method='post')
                             tr.form-group
@@ -103,15 +112,20 @@ block content
                                 td 
                                     input.form-control.input-sm(type="text", placeholder='password', name="password") 
                                 td(colspan="3")
-                                    input.form-control.input-sm(type="text", placeholder='class', name="class") 
-                                td.text-center Date will be filled automatically
-                                td(width="40")  
+                                    select.form-control.input-sm(name="class",required) 
+                                        option(value='') -- Select Type --
+                                        - var options = [{value: 'a', label: 'Admin'}, {value: 'd', label: 'Doctor'}, {value: 'p', label: 'Patient'}, {value: 'r', label: 'Radiologist'}]
+                                        each option in options
+                                            option(value=option.value)= option.label 
+                                        td.text-center 
+                                            small Date will be filled automatically
+                                td(width="40",colspan='2')  
                                     input(type='hidden',value=person.person_id,name='personid')
-                                    button.btn.btn-primary.btn-sm.pull-right(type='submit') New
+                                    button.btn.btn-success.btn-sm.pull-right(type='submit') New
 
-
-                    div.table-responsive
-                      table(class='table table-striped')
+                div.row
+                    div.table-responsive.col-sm-4
+                        table(class='table table-striped')
                          thead
         
                             tr
@@ -125,9 +139,8 @@ block content
                                 td 
                                     input(type='hidden', value=doctor.person_id,name="doctorid")
                                     input(type='hidden', value=person.person_id,name="personid")
-                                    button.btn.btn-primary.btn-sm(type='submit') Remove Doctor
-
-                div
+                                    button.btn.btn-danger.btn-sm(type='submit') Remove Doctor
+                div.row
                   form(action='/admin/person/adddoc',method='post')
                     div.col-sm-3
                         select.form-control.input-sm(name='doctorid')
@@ -136,5 +149,5 @@ block content
                                  option(value=doctor.person_id) #{doctor.last_name}, #{doctor.first_name}
                     div.col-sm-2
                         input(type='hidden', value=person.person_id,name="personid")
-                        button.btn.btn-primary.btn-sm(type='submit') Add Doctor to Patient
+                        button.btn.btn-success.btn-sm(type='submit') Add Doctor to Patient
 
