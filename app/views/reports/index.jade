@@ -1,7 +1,53 @@
 extends ../layout
 
 block content 
-  div.main
-    h1 Welcome to Reports
+    div.col-sm-3
+    div.col-sm-6.top-buffer
+        div(class='panel panel-primary')
+            div.panel-heading 
+                h3.panel-title Generate report list
+            div.panel-body
+                form(action='/report',name="report",method='post',enctype="multipart/form-data",id="form-report")
+                    .form-group 
+                        label.col-sm-8.control-label(for="") Since Date
+                        div#datetimepicker2.col-sm-12.input-group.date
+                            input.form-control(name='testdate',disabled)
+                            span.input-group-addon
+                                span.glyphicon.glyphicon-calendar
+                    .form-group
+                        label.col-sm-8.control-label(for="") Diagnosis
+                        .col-sm-10
+                        textarea.form-control(type="text", placeholder="", name="diagnosis") 
+                    .form-group
+                        .col-sm-offset-2.col-sm-10
+                        button.btn.btn-primary(type='submit') Get reports
 
 
+      each person, i in persons
+        div(class='panel panel-primary top-buffer')
+            div.panel-heading 
+                h3.panel-title Record list              
+            div.panel-body
+                div.table-responsive
+                  table(class='table')
+                    thead                             
+                            tr 
+                                th First Name
+                                th Last Name
+                                th Address
+                                th Phone
+                                th Test Date
+
+                    tbody
+                        form(action='/admin/person/update',method='post')
+                            tr.form-group  
+                                td #{person.first_name}
+                                    input(type='hidden',value=person.first_name,name='firstname')
+                                td #{person.last_name}
+                                    input(type='hidden',value=person.last_name,name='lastname')
+                                td #{person.address}
+                                    input(type='hidden',value=person.address,name='address')
+                                td #{person.phone}
+                                    input(type='hidden',value=person.phone,name='phone')
+                                td #{radiology_record.test_date}
+                                    input(type='hidden',value=radiology_record.test_date,name='testdate')
