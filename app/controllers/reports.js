@@ -1,6 +1,5 @@
 var db = require('orm').db,
   Person = db.models.persons;
-User = db.models.users;
 Record = db.models.radiology_record;
 
 exports.index = function(req, res){
