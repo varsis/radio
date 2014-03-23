@@ -47,9 +47,6 @@ var maxImageId ;
                 if (err) return handle(err);
             gm(image.path).resize(500, 500)
                 .toBuffer(function (err, medium) {
-                                    console.log("THUMBNAIL");
-
-
                     if (err) return handle(err);
                 gm(image.path).toBuffer(function (err, full) {
 
