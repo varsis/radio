@@ -84,20 +84,21 @@ block content
                                 th(width='40') Remove
                          tbody
                            each user, i in person.users
-                            form(action='/admin/user/update',method='post')
                               tr.form-group
-                                td #{user.user_name}
-                                td 
-                                    input.form-control.input-sm(type="text", placeholder=user.password, name="password") 
-                                td 
-                                    select.form-control.input-sm(name="class")
-                                        - var options = [{value: 'a', label: 'Admin'}, {value: 'd', label: 'Doctor'}, {value: 'p', label: 'Patient'}, {value: 'r', label: 'Radiologist'}]
-                                        each option in options
-                                            option(value=option.value, selected=(user.class==option.value))= option.label 
-                                td(colspan="3") 
-                                    input.form-control.input-sm(type="text", placeholder=user.date_registered, name="dateregistered") 
-                                td(width="40")  
-                                    button.btn.btn-primary.btn-sm(type='submit') Save
+                                form(action='/admin/user/update',method='post')
+                                    td #{user.user_name}
+                                    td 
+                                        input.form-control.input-sm(type="text", placeholder=user.password, name="password") 
+                                    td 
+                                        select.form-control.input-sm(name="class")
+                                            - var options = [{value: 'a', label: 'Admin'}, {value: 'd', label: 'Doctor'}, {value: 'p', label: 'Patient'}, {value: 'r', label: 'Radiologist'}]
+                                            each option in options
+                                                option(value=option.value, selected=(user.class==option.value))= option.label 
+                                    td(colspan="3") 
+                                        input.form-control.input-sm(type="text", placeholder=user.date_registered, name="dateregistered") 
+                                    td(width="40")
+                                        input(type='hidden',value=user.user_name,name='username')
+                                        button.btn.btn-primary.btn-sm(type='submit') Save
 
                                 td 
                                     form(action='/admin/user/remove',method='post')
@@ -146,7 +147,7 @@ block content
                         select.form-control.input-sm(name='doctorid')
                             each doctor, i in persons
                                 - if(doctor.person_id != person.person_id)
-                                 option(value=doctor.person_id) #{doctor.last_name}, #{doctor.first_name}
+                                        option(value=doctor.person_id) #{doctor.last_name}, #{doctor.first_name}
                     div.col-sm-2
                         input(type='hidden', value=person.person_id,name="personid")
                         button.btn.btn-success.btn-sm(type='submit') Add Doctor to Patient

@@ -75,6 +75,7 @@ if(req.body.username.length > 0 && req.body.password.length > 0 && req.body.clas
 exports.remove = function(req,res){
     User.find({ user_name: req.body.username}).remove(function (err) {
         if(err) throw (err);
+        console.log(req.body.username);
     // err - description of the error or null
     // items - array of inserted items
     res.redirect('/admin/users');
@@ -125,7 +126,7 @@ exports.updateProfile = function(req,res) {
 
 exports.update = function(req,res) {
 
-    User.get(req.user.user_name, function (err, user) {
+    User.get(req.body.username, function (err, user) {
     // finds person with id = 123
         if(req.body.password != '') {
             console.log(req.body.password);

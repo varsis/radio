@@ -7,6 +7,7 @@
     "components"
   ],
   "dependencies": {
-    "bootstrap": "~3.1.1"
+    "bootstrap": "~3.1.1",
+    "eonasdan-bootstrap-datetimepicker": "~3.0.0"
   }
 }

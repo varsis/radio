@@ -68,6 +68,7 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
     app.post('/admin/user/remove', user.remove);
 
     app.get('/upload', upload.index);
+    app.post('/upload', upload.post);
     app.get('/search', search.index);
     app.get('/analysis', analysis.index);
     app.get('/reports', reports.index);

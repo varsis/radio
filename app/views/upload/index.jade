@@ -7,11 +7,76 @@ block content
             div.panel-heading 
                 h3.panel-title Add a new Radiology report
             div.panel-body
-                form(action='/profile',method='post')
+                form(action='/upload',name="upload",method='post',enctype="multipart/form-data",id="form-upload")
                     .form-group
-                        label.col-sm-2.control-label(for="testtype") TestType
+                        label.col.control-label(for="") Patient Name
                         .col-sm-10
-                        input#email.form-control(type="username", placeholder="placeholdingtext", name="password") 
+                        select.form-control.input-sm(name="patient",onChange="updateDoctors(this.value)")
+                            option(value="") -- Select a Patient --
+                            each person in persons
+                                option(value=person.person_id) #{person.last_name}, #{person.first_name}
+                    .form-group
+                        label.col.control-label(for="") Doctors Name
+                        .col-sm-10
+                        select.form-control.input-sm(name="doctor")
+                            option(value="") -- Select A Doctor --
+                    .form-group 
+                        label.col-sm-8.control-label(for="") Prescribing Date
+                        div#datetimepicker1.col-sm-12.input-group.date
+                            input.form-control(name='presdate',disabled)
+                            span.input-group-addon
+                                span.glyphicon.glyphicon-calendar
+
+                    .form-group 
+                        label.col-sm-8.control-label(for="") Test Date
+                        div#datetimepicker2.col-sm-12.input-group.date
+                            input.form-control(name='testdate',disabled)
+                            span.input-group-addon
+                                span.glyphicon.glyphicon-calendar
+
+                    .form-group
+                        label.col-sm-8.control-label(for="") Test Type
+                        .col-sm-10
+                        input.form-control(type="text", placeholder="", name="testtype") 
+                    .form-group
+                        label.col-sm-8.control-label(for="") Description
+                        .col-sm-10
+                        textarea.form-control(type="text", placeholder="", name="description") 
+                    .form-group
+                        label.col-sm-8.control-label(for="") Diagnosis
+                        .col-sm-10
+                        textarea.form-control(type="text", placeholder="", name="diagnosis") 
+                    .form-group
+                        .col-sm-10
+                        input.form-control(type="file",multiple='multiple',name="images") 
                     .form-group
                         .col-sm-offset-2.col-sm-10
                         button.btn.btn-primary(type='submit') Save
+
+
+    script.
+        var patientslist=document.upload.patient
+        var doctorslist=document.upload.doctor
+       
+        function updateDoctors(selectedObject){ 
+            doctorslist.options.length=0
+
+            
+            var persons = !{JSON.stringify(persons)}
+            var patientsDoctors
+             for(var i=0; i<persons.length; i++) {
+                if (persons[i].person_id.toString() == selectedObject){
+                    patientsDoctors = persons[i].doctors;
+                    
+                if (patientsDoctors.length>0){
+                    for (i=0; i<patientsDoctors.length; i++)
+                        doctorslist.options[i]=new Option(patientsDoctors[i].last_name + ", " + patientsDoctors[i].first_name,patientsDoctors[i].person_id);
+                } else {
+                        doctorslist.options[0] = new Option("There are no Doctors listed for this Patient","")
+                }
+
+                    
+                    }
+            }
+        }
+              

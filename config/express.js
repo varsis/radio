@@ -7,6 +7,9 @@ var passport = require('passport')
 var User = db.models.users;
 var Person = db.models.persons;
 var Record = db.models.radiology_record;
+var FamilyDoctor = db.models.family_doctor;
+
+
 
 Person.hasMany('users', User ,{
 }, {
@@ -26,11 +29,19 @@ Person.hasMany('records', Record, { }, {
     mergeAssocId: 'record_id'
 });
 
+FamilyDoctor.hasOne('doctor_person', Person, {}, {
+    autoFetch: true,
+    mergeTable: 'persons',
+    field: 'doctor_id',
+    mergeAssocId: 'person_id'
+});
+
 
 module.exports = function(app, config) {
   app.configure(function () {
     app.use(express.compress());
     app.use(express.static(config.root + '/public'));
+    app.use('/js',express.static(config.root + '/public/js'));
     app.set('port', config.port);
     app.set('views', config.root + '/app/views');
     app.set('view engine', 'jade');
