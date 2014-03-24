@@ -1,9 +1,9 @@
 var db = require('orm').db,
+     orm = require('orm'),
   Person = db.models.persons;
 Record = db.models.radiology_record;
 
 exports.index = function(req, res){
-    console.log(res);
     if(res.locals.records !== undefined) {
             res.render('reports/index',{records:res.locals.records});
         } else {
@@ -21,7 +21,7 @@ exports.index = function(req, res){
 exports.filter = function(req,res,next) {
     console.log("logging some shit, diagnosis = ",req.body.testdate);
 
-	Record.find({diagnosis: req.body.diagnosis},1).where("test_date >= " + req.body.testdate).order('test_date').all(function(err, records){
+	Record.find({diagnosis: req.body.diagnosis, test_date: orm.gte(req.body.testdate)},1,function(err, records){
 		console.log("logging some shit, diagnosis = ",records,req.body.testdate);
         res.locals.records = records;
         next();
