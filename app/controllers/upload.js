@@ -20,6 +20,9 @@ exports.index = function(req, res){
 };
 
 exports.post = function(req,res) {
+
+    console.log(req.body);
+
 var maxImageId ;
     Images.aggregate(["image_id"]).max("image_id").get(function (err, maxImage) {
         maxImageId = maxImage;
