@@ -1,7 +1,97 @@
 extends ../layout
 
 block content 
-  div.main
-    h1 Welcome to analysis
+    div.row.top-buffer
+        div(class='panel panel-primary')
+            div.panel-heading 
+                h3.panel-title Analysis inputs
+            div.panel-body
+                form(action='/admin/analysis/update',name="update",method='post',enctype="multipart/form-data",id="form-analysis")
+                    .form-group 
+                        label.col-sm-8.control-label(for="") Greater Than Date
+                        .col-sm-10
+                        input#datetimepicker1.form-control(name='startdate',data-date-format="YYYY-MM-DD")
+                    .form-group 
+                        label.col-sm-8.control-label(for="") Less Than Date
+                        .col-sm-10
+                        input#datetimepicker2.form-control(name='enddate',data-date-format="YYYY-MM-DD")
+                    .form-group
+                        label.col-sm-8.control-label(for="") By test type
+                        .col-sm-10
+                        input(type="checkbox", name="bytest")
+                    .form-group
+                        label.col-sm-8.control-label(for="") By patient name
+                        .col-sm-10
+                        input(type="checkbox", name="byname")
+                    .form-group
+                        .col-sm-offset-2.col-sm-10
+                        button.btn.btn-primary(type='submit') Generate Analysis
+
+       -if (byname)
+        div(class='panel panel-primary top-buffer')
+            div.panel-heading 
+                h3.panel-title Generated analysis              
+            div.panel-body
+                div.table-responsive
+                  table(class='table')
+                    thead                             
+                            tr 
+                                th First Name
+                                th Last Name
+                                th Number of images
+
+                    tbody
+                        form(action='/admin/analysis/update',method='post')
+                           each person, i in persons                        
+                            tr.form-group  
+                                td #{person.first_name}
+                                    input(type='hidden',value=person.first_name,name='firstname')
+                                td #{person.last_name}
+                                    input(type='hidden',value=person.last_name,name='lastname')
+                                //add image count thing
+
+       -if (bytest)
+        div(class='panel panel-primary top-buffer')
+            div.panel-heading 
+                h3.panel-title Generated analysis              
+            div.panel-body
+                div.table-responsive
+                  table(class='table')
+                    thead                             
+                            tr 
+                                th Test type
+                                th Number of images
+
+                    tbody
+                        form(action='/admin/analysis/update',method='post')
+                           each person, i in persons                        
+                            tr.form-group  
+                                //add type thing
+                                //add image count thing
 
 
+       -if (bynamebytest)
+        div(class='panel panel-primary top-buffer')
+            div.panel-heading 
+                h3.panel-title Generated analysis              
+            div.panel-body
+                div.table-responsive
+                  table(class='table')
+                    thead                             
+                            tr 
+                                th First Name
+                                th Last Name
+                                th Test type
+                                th Number of images
+
+                    tbody
+                        form(action='/admin/analysis/update',method='post')
+                           each person, i in persons                        
+                            tr.form-group  
+                                td #{person.first_name}
+                                    input(type='hidden',value=person.first_name,name='firstname')
+                                td #{person.last_name}
+                                    input(type='hidden',value=person.last_name,name='lastname')
+                                //add type thing
+                                //add image count thing
+                       
