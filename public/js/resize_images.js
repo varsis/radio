@@ -40,7 +40,7 @@ document.querySelector('form input[type=file]').addEventListener('change', funct
 				image.src = readerEvent.target.result;
                 // Add elemnt to page
 				var imageElement = document.createElement('div');
-				imageElement.innerHTML = '< class="progress"><span>Image Added</span></span>';
+				imageElement.innerHTML = '<img/><span>Image Added</span>';
 				document.querySelector('form div.photos').appendChild(imageElement);
 
 

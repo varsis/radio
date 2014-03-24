@@ -29,6 +29,14 @@ Person.hasMany('records', Record, { }, {
     mergeAssocId: 'record_id'
 });
 
+
+Record.hasOne('person', Person, { }, {
+    autoFetch: true,
+    mergeTable: 'persons',
+    field: 'patient_id',
+    mergeAssocId: 'person_id'
+});
+
 FamilyDoctor.hasOne('doctor_person', Person, {}, {
     autoFetch: true,
     mergeTable: 'persons',

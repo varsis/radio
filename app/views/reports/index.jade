@@ -1,23 +1,21 @@
 extends ../layout
 
 block content 
-    div.col-sm-3
-    div.col-sm-6.top-buffer
+    div.col-sm-1
+    div.col-sm-10.top-buffer
         div(class='panel panel-primary')
             div.panel-heading 
                 h3.panel-title Generate report list
             div.panel-body
-                form(action='reports',name="report",method='post',enctype="multipart/form-data",id="form-report")
+                form(action='/admin/reports/filter',name="report",method='post',enctype="multipart/form-data",id="form-report")
                     .form-group 
                         label.col-sm-8.control-label(for="") Since Date
-                        div#datetimepicker2.col-sm-12.input-group.date
-                            input.form-control(name='testdate',disabled)
-                            span.input-group-addon
-                                span.glyphicon.glyphicon-calendar
+                        .col-sm-10
+                        input#datetimepicker1.form-control(name='testdate',data-date-format="YYYY-MM-DD")
                     .form-group
                         label.col-sm-8.control-label(for="") Diagnosis
                         .col-sm-10
-                        textarea.form-control(type="text", placeholder="", name="diagnosis") 
+                        textarea.form-control(type="text", placeholder="", name="diagnosis")
                     .form-group
                         .col-sm-offset-2.col-sm-10
                         button.btn.btn-primary(type='submit') Get reports
@@ -39,6 +37,7 @@ block content
 
                     tbody
                         form(action='/admin/reports/update',method='post')
+                         -if(persons)
                            each person, i in persons                        
                             tr.form-group  
                                 td #{person.first_name}
@@ -52,3 +51,16 @@ block content
                                 - if(person.records.length > 0)
                                        td #{person.records[0].test_date}
                                            input(type='hidden',value=person.records[0].test_date,name='testdate')
+                         -if(records)
+                           each record, i in records                        
+                            tr.form-group  
+                                td #{record.person.first_name}
+                                    //-input(type='hidden',value=person.first_name,name='firstname')
+                                td #{record.person.last_name}
+                                   //- input(type='hidden',value=person.last_name,name='lastname')
+                                td #{record.person.address}
+                                    //-input(type='hidden',value=person.address,name='address')
+                                td #{record.person.phone}
+                                    //-input(type='hidden',value=person.phone,name='phone')
+                                td #{record.test_date}
+                                    //-input(type='hidden',value=person.records[0].test_date,name='testdate')
