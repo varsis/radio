@@ -22,18 +22,11 @@ block content
                                 option(value="") -- Select A Doctor --
                         .form-group 
                             label.col-sm-8.control-label(for="") Prescribing Date
-                            div#datetimepicker1.col-sm-12.input-group.date(data-date-format="YYYY-MM-DD")
-                                input.form-control(name='presdate')
-                                span.input-group-addon
-                                    span.glyphicon.glyphicon-calendar
+                            input#datetimepicker1.form-control(name='presdate',data-date-format="YYYY-MM-DD")
 
                         .form-group 
                             label.col-sm-8.control-label(for="") Test Date
-                            div#datetimepicker2.col-sm-12.input-group.date(data-date-format="YYYY-MM-DD")
-
-                                input.form-control(name='testdate')
-                                span.input-group-addon
-                                    span.glyphicon.glyphicon-calendar
+                            input#datetimepicker2.form-control(name='testdate',data-date-format="YYYY-MM-DD")
 
                         .form-group
                             label.col-sm-8.control-label(for="") Test Type

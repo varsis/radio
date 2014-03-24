@@ -13,7 +13,11 @@ exports.index = function(req, res){
 };
 
 exports.filter = function(req,res) {
-	Person.aggregate({diagnosis: req.body.diagnosis}).min(req.body.testdate).get(function(err, diagnosis, testdate){
-		console.log("logging some shit, diagnosis = %s and the test date = %d", diagnosis, testdate);
+    console.log("logging some shit, diagnosis = ",req.body.testdate);
+
+	Record.find({diagnosis: req.body.diagnosis}).where("test_date >= " + req.body.testdate).all(function(err, records){
+		console.log("logging some shit, diagnosis = ",records,req.body.testdate);
+        res.render('reports/index',{records:records});
 	}
-)};
+
+    )};
