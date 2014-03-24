@@ -7,7 +7,7 @@ block content
             div.panel-heading 
                 h3.panel-title Generate report list
             div.panel-body
-                form(action='/report',name="report",method='post',enctype="multipart/form-data",id="form-report")
+                form(action='reports',name="report",method='post',enctype="multipart/form-data",id="form-report")
                     .form-group 
                         label.col-sm-8.control-label(for="") Since Date
                         div#datetimepicker2.col-sm-12.input-group.date
@@ -23,7 +23,6 @@ block content
                         button.btn.btn-primary(type='submit') Get reports
 
 
-      each person, i in persons
         div(class='panel panel-primary top-buffer')
             div.panel-heading 
                 h3.panel-title Record list              
@@ -39,7 +38,8 @@ block content
                                 th Test Date
 
                     tbody
-                        form(action='/admin/person/update',method='post')
+                        form(action='/admin/reports/update',method='post')
+                           each person, i in persons                        
                             tr.form-group  
                                 td #{person.first_name}
                                     input(type='hidden',value=person.first_name,name='firstname')
@@ -49,5 +49,6 @@ block content
                                     input(type='hidden',value=person.address,name='address')
                                 td #{person.phone}
                                     input(type='hidden',value=person.phone,name='phone')
-                                td #{radiology_record.test_date}
-                                    input(type='hidden',value=radiology_record.test_date,name='testdate')
+                                - if(person.records.length > 0)
+                                       td #{person.records[0].test_date}
+                                           input(type='hidden',value=person.records[0].test_date,name='testdate')

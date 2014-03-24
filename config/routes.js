@@ -71,5 +71,6 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
     app.post('/upload', upload.post);
     app.get('/search', search.index);
     app.get('/analysis', analysis.index);
-    app.get('/reports', reports.index);
+    app.get('/admin/reports', reports.index);
+    app.post('/admin/reports/filter', reports.filter);
 };
