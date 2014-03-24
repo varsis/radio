@@ -36,6 +36,12 @@ FamilyDoctor.hasOne('doctor_person', Person, {}, {
     mergeAssocId: 'person_id'
 });
 
+User.hasOne('person', Person, {}, {
+    autoFetch: true,
+    mergeTable: 'persons',
+    field: 'person_id',
+    mergeAssocId: 'person_id'
+});
 
 module.exports = function(app, config) {
   app.configure(function () {

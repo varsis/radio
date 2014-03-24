@@ -13,7 +13,9 @@
     "passport": "^0.2.0",
     "passport-local": "^1.0.0",
     "pause": "0.0.1",
-    "passport-strategy": "^1.0.0"
+    "passport-strategy": "^1.0.0",
+    "temp": "^0.7.0",
+    "gm": "^1.14.2"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

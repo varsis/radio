@@ -2,6 +2,7 @@ var express = require('express'),
 
   orm = require('orm'),
   fs = require('fs'),
+  gm = require('gm')
   config = require('./config/config');
 
 orm.settings.set("instance.cache", false);
