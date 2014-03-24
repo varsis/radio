@@ -1,7 +1,53 @@
 extends ../layout
 
 block content 
-  div.main
-    h1 Welcome to Search
+        div
+            div.col-md-3
+            div.col-md-6.top-buffer
+                    h1 Welcome to Search
+                    div(class='panel panel-primary')
+                        div.panel-heading 
+                            h3.panel-title Search
+                        div.panel-body
+                            form(action='/search',name="report",method='post',enctype="multipart/form-data",id="form-report")
+                                .form-group 
+                                    label.col-sm-8.control-label(for="") Greater Than Date
+                                    .col-sm-10
+                                    input#datetimepicker1.form-control(name='startdate',data-date-format="YYYY-MM-DD")
+                                .form-group 
+                                    label.col-sm-8.control-label(for="") Less Than Date
+                                    .col-sm-10
+                                    input#datetimepicker2.form-control(name='enddate',data-date-format="YYYY-MM-DD")
+                                .form-group
+                                    label.col-sm-8.control-label(for="") Keywords
+                                    .col-sm-10
+                                    input.form-control(type="text", placeholder="", name="keys")
+                                .form-group
+                                    .col-sm-offset-2.col-sm-10
+                                    button.btn.btn-primary(type='submit') Get reports
+        div
+          -if(records)
+            div.col-md-12
+                div(class='panel panel-primary')
+                    div.panel-heading 
+                        h3.panel-title Results
+                    div.panel-body
+                        div.table-responsive
+                          table(class='table')
+                            thead                             
+                                    tr 
+                                        th First Name
+                                        th Last Name
+                                        th Address
+                                        th Phone
+                                        th Test Date
 
+                            tbody
+                                   each record, i in records                        
+                                    tr.form-group  
+                                        td #{record.person.first_name}
+                                        td #{record.person.last_name}
+                                        td #{record.person.address}
+                                        td #{record.person.phone}
+                                        td #{record.test_date}
 
