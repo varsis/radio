@@ -15,8 +15,8 @@ var radiology_record = db.define('radiology_record', {
     id   : "record_id"
 } , {
   methods: {
-    example: function(){
-      // return example;
+    sortDefault: function(record1,record2){
+        return record1.test_date > record1.test_date;    
     }
   }
 });
