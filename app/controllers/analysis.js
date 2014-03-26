@@ -19,12 +19,25 @@ exports.index = function(req, res){
 };
 
 exports.update = function(req,res,next) {
-    console.log("logging some shit, diagnosis = ",req.body.testdate);
-
-	Record.find({diagnosis: req.body.diagnosis, test_date: orm.gte(req.body.testdate)},1,function(err, records){
-		console.log("logging some shit, diagnosis = ",records,req.body.testdate);
+    console.log("logging some shit: ",req.body.testdate);
+    Record.find({diagnosis: req.body.diagnosis, test_date: orm.gte(req.body.testdate)},1,function(err, records){
+    console.log("logging some shit, diagnosis = ",records,req.body.testdate);
+    }
+ if(req.body.records && req.body.persons){
+        res.locals.records = personsrecords;
+        next();
+        }
+ else if(req.body.persons){
+        res.locals.records = persons;
+        next();
+        }
+ else if(req.body.records){
         res.locals.records = records;
         next();
-    }
+        }
+ else {
+        res.locals.records = justdate;
+        next();
+      }
 
     )};

@@ -18,16 +18,35 @@ block content
                     .form-group
                         label.col-sm-8.control-label(for="") By test type
                         .col-sm-10
-                        input(type="checkbox", name="bytest")
+                        input(type="checkbox", name="records")
                     .form-group
                         label.col-sm-8.control-label(for="") By patient name
                         .col-sm-10
-                        input(type="checkbox", name="byname")
+                        input(type="checkbox", name="persons")
                     .form-group
                         .col-sm-offset-2.col-sm-10
                         button.btn.btn-primary(type='submit') Generate Analysis
 
-       -if (byname)
+       -if (justdate)
+        div(class='panel panel-primary top-buffer')
+            div.panel-heading 
+                h3.panel-title Generated analysis              
+            div.panel-body
+                div.table-responsive
+                  table(class='table')
+                    thead                             
+                            tr
+                                th Number of images
+
+                    tbody
+                        form(action='/admin/analysis/update',method='post')
+                           each person, i in persons                        
+                            tr.form-group  
+                                td 
+                                //add image count thing
+
+
+       -if (persons)
         div(class='panel panel-primary top-buffer')
             div.panel-heading 
                 h3.panel-title Generated analysis              
@@ -45,12 +64,10 @@ block content
                            each person, i in persons                        
                             tr.form-group  
                                 td #{person.first_name}
-                                    input(type='hidden',value=person.first_name,name='firstname')
                                 td #{person.last_name}
-                                    input(type='hidden',value=person.last_name,name='lastname')
                                 //add image count thing
 
-       -if (bytest)
+       -if (records)
         div(class='panel panel-primary top-buffer')
             div.panel-heading 
                 h3.panel-title Generated analysis              
@@ -66,11 +83,11 @@ block content
                         form(action='/admin/analysis/update',method='post')
                            each person, i in persons                        
                             tr.form-group  
-                                //add type thing
+                               // td #{person.record.test_type}
                                 //add image count thing
 
 
-       -if (bynamebytest)
+       -if (personsrecords)
         div(class='panel panel-primary top-buffer')
             div.panel-heading 
                 h3.panel-title Generated analysis              
@@ -89,9 +106,6 @@ block content
                            each person, i in persons                        
                             tr.form-group  
                                 td #{person.first_name}
-                                    input(type='hidden',value=person.first_name,name='firstname')
                                 td #{person.last_name}
-                                    input(type='hidden',value=person.last_name,name='lastname')
-                                //add type thing
-                                //add image count thing
-                       
+                                td #{person.record.test_type}
+                                //add image count thingss
