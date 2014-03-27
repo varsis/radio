@@ -38,12 +38,29 @@ Person.hasMany('records', Record, { }, {
     mergeAssocId: 'record_id'
 });
 
-Record.hasOne('person', Person, { }, {
+Record.hasOne('patient', Person, { }, {
     autoFetch: true,
     mergeTable: 'persons',
     field: 'patient_id',
     mergeAssocId: 'person_id'
 });
+
+Record.hasOne('doctor', Person, { }, {
+    autoFetch: true,
+    mergeTable: 'persons',
+    field: 'doctor_id',
+    mergeAssocId: 'person_id'
+});
+
+Record.hasOne('radiologist', Person, { }, {
+    autoFetch: true,
+    mergeTable: 'persons',
+    field: 'radiologist_id',
+    mergeAssocId: 'person_id'
+});
+
+
+
 
 FamilyDoctor.hasOne('doctor_person', Person, {}, {
     autoFetch: true,

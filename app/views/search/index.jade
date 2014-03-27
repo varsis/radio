@@ -51,9 +51,9 @@ block content
                           table(class='table')
                             thead                             
                                     tr 
-                                        th Patient ID
-                                        th Doctor ID
-                                        th Radiologist ID 
+                                        th Patient
+                                        th Doctor
+                                        th Radiologist
                                         th Test Type
                                         th Prescribing Date
                                         th Test Date
@@ -62,31 +62,34 @@ block content
 
                             tbody
                                    each record, i in records                        
-                                    tr.form-group  
-                                        td #{record.patient_id} RECORD ID #{record.record_id}
-                                        td #{record.doctor_id}
-                                        td #{record.radiologist_id}
-                                        td #{record.test_type}
-                                        td #{prettyDate(record.prescribing_date)}
-                                        td #{prettyDate(record.test_date)}
-                                        td #{record.diagnosis}
-                                        td #{record.description}
+                                    tr.form-group 
+                                        th #{record.patient.last_name}, #{record.patient.first_name}
+                                        th #{record.doctor.last_name}, #{record.doctor.first_name}
+                                        th #{record.radiologist.last_name}, #{record.radiologist.first_name}
+                                        th #{record.test_type}
+                                        th #{prettyDate(record.prescribing_date)}
+                                        th #{prettyDate(record.test_date)}
+                                        th #{record.diagnosis}
+                                        th #{record.description}
                                         
                                     tr
-                                        td(colspan="8")
                                             for image, i in record.images
                                                 -if(i%4 == 0)
-                                                    div.row
-                                                     div.col-sm-4
-                                                        img(src="/img/"+image.record_id+"/"+image.image_id+"/"+"thumbnail");
-                                                        a(href="/view/img/"+image.record_id+"/"+image.image_id+"/"+"regular") Medium 
-                                                        a(href="/view/img/"+image.record_id+"/"+image.image_id+"/"+"full") Full Size 
-
+                                                    tr
+                                                        td
+                                                            img(src="/img/"+image.record_id+"/"+image.image_id+"/"+"thumbnail");
+                                                        td
+                                                            a(href="/view/img/"+image.record_id+"/"+image.image_id+"/"+"regular") Medium 
+                                                        td(colspan="6")
+                                                            a(href="/view/img/"+image.record_id+"/"+image.image_id+"/"+"full") Full Size 
                                                 -else 
-                                                     div.col-sm-4
-                                                        img(src="/img/"+image.record_id+"/"+image.image_id+"/"+"thumbnail");
-                                                        a(href="/view/img/"+image.record_id+"/"+image.image_id+"/"+"regular") Medium 
-                                                        a(href="/view/img/"+image.record_id+"/"+image.image_id+"/"+"full") Full Size 
+                                                    tr
+                                                        td
+                                                            img(src="/img/"+image.record_id+"/"+image.image_id+"/"+"thumbnail");
+                                                        td
+                                                            a(href="/view/img/"+image.record_id+"/"+image.image_id+"/"+"regular") Medium 
+                                                        td(colspan="6")
+                                                            a(href="/view/img/"+image.record_id+"/"+image.image_id+"/"+"full") Full Size 
 
 
 
