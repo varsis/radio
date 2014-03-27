@@ -18,7 +18,6 @@ exports.sort = function(req, res) {
 exports.post = function(req, res, next){
 
     // Get the keys
-
     // Sort type
     var sort = req.body.sort;
     if(sort != 'default') {
@@ -36,153 +35,84 @@ exports.post = function(req, res, next){
         var keys = reqKeyString;//reqKeyString.split(" ");
     }
 
+
     // Keys and or date
     if(keys && req.body.startdate && req.body.enddate) {
-        fullTextSearch(keys,findBetweenKeys,res,req,sort);
+        fullTextSearch(keys,{record_id:null, test_date: orm.between(req.body.startdate,req.body.enddate)},res,sort,req.user);
     } else if(keys && req.body.startdate) {
-        fullTextSearch(keys,findGreaterThanKeys,res,req,sort);
+        fullTextSearch(keys,{record_id:null, test_date: orm.gt(req.body.startdate)},res,sort,req.user);
     } else if(keys && req.body.enddate) {
-        fullTextSearch(keys,findLessThanKeys,res,req,sort);
+        fullTextSearch(keys,{record_id:null, test_date: orm.lt(req.body.enddate)},res,sort,req.user);
     } else if(req.body.startdate && req.body.enddate){
-        findBetweenNoKeys(null,res,req,sort);
+        fullTextSearch(keys,{test_date: orm.between(req.body.startdate,req.body.enddate)},res,sort,req.user);       
     } else if(req.body.startdate){
-        findGreatThanNoKeys(null,res,req,sort);
+        fullTextSearch(keys,{test_date: orm.gt(req.body.startdate)},res,sort,req.user);       
     } else if(req.body.enddate){
-        findLessThanNoKeys(null,res,req,sort);
+        fullTextSearch(keys,{test_date: orm.lt(req.body.enddate)},res,sort,req.user);    
     } else if(keys){
-        fullTextSearch(keys,findKeysOnly,res,req,sort);
+        fullTextSearch(keys,{record_id:null},res,sort,req.user);
     } else {
-         if(sort == '') {
-               Records.all(function(err,records){
-            res.render('search/index',{records: records});
-        });
-         } else {
-        Records.find().order(sort).all(function(err,records){
-            res.render('search/index',{records: records});
-        });
-         }
+        fullTextSearch(keys,{},res,sort,req.user);
     }
 };
 
+var fullTextSearch =  function(keys,query,res,sort,user){
 
-var findLessThanKeys =  function(array,res,req,sort) {
-    if(sort == '') {
-        Records.find({record_id:array, test_date: orm.lt(req.body.enddate)},function(err,records){
-            // IF sort is default
-            records = reorder(array,records);
-            res.render('search/index',{records:records});
-        });
+    if(keys) {
+        orm.db.driver.execQuery("SELECT record.record_id, ((MATCH (persons.first_name,persons.last_name) AGAINST (?)) * 6 + (MATCH (record.diagnosis) AGAINST (?)) * 3 + (MATCH(record.description) AGAINST (?))) as score FROM persons INNER JOIN radiology_record record ON persons.person_id = record.patient_id WHERE MATCH (diagnosis,description) AGAINST (?) OR MATCH (first_name,last_name) AGAINST (?) ORDER BY score DESC;",
+                [keys, keys,keys,keys,keys],
+                function (err, data) {
+
+                    // Get the Order of all the record_id's
+                    var array = Array();
+                    for(var i = 0; i < data.length; i ++) {
+                        array.push(data[i].record_id);
+                    }
+                    query.record_id = array;
+
+                    keySearch(array,query,res,sort,user);
+                })
     } else {
-        Records.find({record_id:array, test_date: orm.lt(req.body.enddate)}).order(sort).all(function(err,records){
-            res.render('search/index',{records:records});
-        });
-    }
-}
-
-
-
-var findGreaterThanKeys =  function(array,res,req,sort) {
-
-    if(sort == '') {
-        Records.find({record_id:array, test_date: orm.gt(req.body.startdate)},function(err,records){
-            // IF sort is default
-            records = reorder(array,records);
-            res.render('search/index',{records:records});
-        });
-    } else {
-        Records.find({record_id:array, test_date: orm.gt(req.body.startdate)}).order(sort).all(function(err,records){
-            res.render('search/index',{records:records});
-        });
-    }
-}
-
-
-var findBetweenKeys = function(array,res,req,sort) {
-    if(sort == '') {
-        Records.find({record_id:array, test_date: orm.between(req.body.startdate,req.body.enddate)},function(err,records){
-            // IF sort is default
-            records = reorder(array,records);
-            res.render('search/index',{records:records});
-        });
-    } else {
-        Records.find({record_id:array, test_date: orm.between(req.body.startdate,req.body.enddate)}).order(sort).all(function(err,records){
-            res.render('search/index',{records:records});
-        });
+        keySearch(null,query,res,sort,user);
     }
 };
 
+var keySearch = function(array,query,res,sort,user) {
 
-var findLessThanNoKeys =  function(array,res,req,sort) {
-
-    if(sort == '') {
-        Records.find({test_date: orm.lt(req.body.enddate)},function(err,records){
-            res.render('search/index',{records:records});
-        });
+    console.log(user);
+    var access = user.class;
+    if(access == 'a') {
+        // do nothing
+        // ADMIN
+    } else if(access == 'p') {
+        // patient
+        query.patient_id = user.person.person_id;
+    } else if(access == 'd') {
+        // doctor
+        query.doctor_id = user.person.person_id;
+    } else if(access == 'r') {
+        query.radiologist_id = user.person.person_id;
     } else {
-        Records.find({test_date: orm.lt(req.body.enddate)}).order(sort).all(function(err,records){
-            res.render('search/index',{records:records});
-        });
+        throw "Unknown user class";
     }
-}
 
 
-
-var findGreaterThanNoKeys =  function(array,res,req,sort) {
+    console.log(query);
 
 
     if(sort == '') {
-        Records.find({test_date: orm.gt(req.body.startdate)},function(err,records){
-            res.render('search/index',{records:records});
-        });
-    } else {
-        Records.find({test_date: orm.gt(req.body.startdate)}).order(sort).all(function(err,records){
-            res.render('search/index',{records:records});
-        });
-    }
-}
-
-var findBetweenNoKeys = function(array,res,req,sort) {
-
-    if(sort == '') {
-        Records.find({test_date: orm.between(req.body.startdate,req.body.enddate)},function(err,records){
-            res.render('search/index',{records:records});
-        });
-    } else {
-        Records.find({test_date: orm.between(req.body.startdate,req.body.enddate)}).order(sort).all(function(err,records){
-            res.render('search/index',{records:records});
-        });
-    }
-}
-
-
-var findKeysOnly = function(array,res,req,sort) {
-    if(sort == '') {
-        Records.find({record_id:array},function(err,records){
-            // Find reorders them by id, so order by our array
+        Records.find(query,function(err,records){
             // IF sort is default
-            if(sort == '')
-                records = reorder(array,records);
+            if(array != null)
+            records = reorder(array,records);
 
         res.render('search/index',{records:records});
         });
     } else {
-        Records.find({record_id:array}).order(sort).all(function(err,records){
+        Records.find(query).order(sort).all(function(err,records){
             res.render('search/index',{records:records});
         });
-    }}
-
-
-var fullTextSearch =  function(keys,findFunction,res,req,sort){orm.db.driver.execQuery("SELECT record.record_id, ((MATCH (persons.first_name,persons.last_name) AGAINST (?)) * 6 + (MATCH (record.diagnosis) AGAINST (?)) * 3 + (MATCH(record.description) AGAINST (?))) as score FROM persons INNER JOIN radiology_record record ON persons.person_id = record.patient_id WHERE MATCH (diagnosis,description) AGAINST (?) OR MATCH (first_name,last_name) AGAINST (?) ORDER BY score DESC;",
-        [keys, keys,keys,keys,keys],
-        function (err, data) {
-
-            // Get the Order of all the record_id's
-            var array = Array();
-            for(var i = 0; i < data.length; i ++) {
-                array.push(data[i].record_id);
-            }
-            findFunction(array,res,req,sort);
-        })
+    }
 };
 
 var reorder = function(array,records) {
