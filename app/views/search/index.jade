@@ -59,12 +59,11 @@ block content
                                         th Test Date
                                         th Diagnosis
                                         th Description
-                                        th Images
 
                             tbody
                                    each record, i in records                        
                                     tr.form-group  
-                                        td #{record.patient_id}
+                                        td #{record.patient_id} RECORD ID #{record.record_id}
                                         td #{record.doctor_id}
                                         td #{record.radiologist_id}
                                         td #{record.test_type}
@@ -73,9 +72,22 @@ block content
                                         td #{record.diagnosis}
                                         td #{record.description}
                                         
-                                        td 
+                                    tr
+                                        td(colspan="8")
                                             for image, i in record.images
-                                                img(src="/img/"+image.record_id+"/"+image.image_id+"/"+"thumbnail");
+                                                -if(i%4 == 0)
+                                                    div.row
+                                                     div.col-sm-4
+                                                        img(src="/img/"+image.record_id+"/"+image.image_id+"/"+"thumbnail");
+                                                        a(href="/view/img/"+image.record_id+"/"+image.image_id+"/"+"regular") Medium 
+                                                        a(href="/view/img/"+image.record_id+"/"+image.image_id+"/"+"full") Full Size 
+
+                                                -else 
+                                                     div.col-sm-4
+                                                        img(src="/img/"+image.record_id+"/"+image.image_id+"/"+"thumbnail");
+                                                        a(href="/view/img/"+image.record_id+"/"+image.image_id+"/"+"regular") Medium 
+                                                        a(href="/view/img/"+image.record_id+"/"+image.image_id+"/"+"full") Full Size 
+
 
 
 

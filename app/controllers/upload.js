@@ -42,22 +42,37 @@ var maxImageId ;
             if(err) throw (err);
         });
         
+        if(req.files.images.path) {
+            var image = req.files.images;    
+            resize(maxImageId,maxRec + 1, image);
+        } else {
         for(var i = 0; i < req.files.images.length; i++) {  
             var image = req.files.images[i];
-            gm(image.path).thumbnail(250, 250)
+            resize(maxImageId + i,maxRec + 1, image);
+            }
+        }
+        });
+
+        res.redirect('/upload');
+};
+
+// Resize images internal
+var resize = function(imageid,recordid,image) {
+
+                gm(image.path).resize(250)
             .toBuffer(function (err, thumbnail) {
 
                 if (err) return handle(err);
-            gm(image.path).resize(500, 500)
+
+            gm(image.path).resize(1024)
                 .toBuffer(function (err, medium) {
                     if (err) return handle(err);
-                gm(image.path).toBuffer(function (err, full) {
 
-                
+                gm(image.path).toBuffer(function (err, full) {
    
                 Images.create([{
-                record_id:   maxRec + 1,
-                image_id:    maxImageId += 1,
+                record_id:   recordid,
+                image_id:    imageid,
                 thumbnail:   thumbnail,
                 regular_size: medium,
                 full_size:    full,}], function (err, items) {
@@ -66,9 +81,5 @@ var maxImageId ;
                 });
                 });
                 });
-            }
-           
-        })
 
-        res.redirect('/upload');
-};
+}

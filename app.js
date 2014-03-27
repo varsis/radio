@@ -4,9 +4,11 @@ var express = require('express'),
   fs = require('fs'),
   gm = require('gm')
   config = require('./config/config');
+  var fts = require("orm-mysql-fts");
 
 orm.settings.set("instance.cache", false);
 orm.db = orm.connect(config.db, function(err, db){
+    db.use(fts);
   if(err){
     console.log("Something is wrong with the connection", err);
     return ;

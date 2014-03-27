@@ -94,13 +94,20 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
         });
     });
 
+
+    app.param('imageidView', function(req, res, next, id){
+        req.imageid = id;
+        next();
+    });
+
+
     app.param('type', function(req, res, next, imageType){
         var data;
         if(imageType == 'thumbnail') {
             data = (req.image).thumbnail;
         } else if(imageType == 'regular') {
             data = (req.image).regular_size;
-        } else {
+        } else if(imageType == 'full'){
             data = (req.image).full_size;
         }
             req.imagedata = data;
@@ -108,5 +115,13 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
 
     });
 
-    app.get('/img/:recordid/:imageid/:type',images.index);
+    app.param('typeView', function(req, res, next, imageType){
+        req.imagetype = imageType;
+        next();
+
+    });
+
+
+    app.get('/img/:recordid/:imageid/:type',images.file);
+    app.get('/view/img/:recordid/:imageidView/:typeView',images.index);
 };

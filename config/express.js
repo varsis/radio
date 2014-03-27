@@ -16,7 +16,7 @@ Images.hasOne('record', Record, { }, {
     autoFetch: true,
     reverse: 'images',
     mergeTable: 'radiology_record',
-    field: 'image_id',
+    field: 'record_id',
     mergeAssocId: 'record_id'
 });
 

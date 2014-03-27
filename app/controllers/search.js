@@ -1,8 +1,9 @@
 var orm = require('orm'),
-  Records = orm.db.models.radiology_record;
+    Records = orm.db.models.radiology_record;
+var fts = require("orm-mysql-fts");
 
 exports.index = function(req, res){
-res.render('search/index');
+    res.render('search/index');
 };
 
 exports.sort = function(req, res) {
@@ -17,114 +18,189 @@ exports.sort = function(req, res) {
 exports.post = function(req, res, next){
 
     // Get the keys
-    var type = req.body.sort;
-    if(req.body.keys)
-        var keys = reqKeyString.split(" ");
 
-
-    if(type != 'default') {
-        var sortVar;
-        if(type == 'ascending') {
-            sortVar = "test_date";
+    // Sort type
+    var sort = req.body.sort;
+    if(sort != 'default') {
+        if(sort == 'ascending') {
+            sort = "test_date";    
         } else {
-            sortVar = "-test_date";
+            sort = "-test_date";
         }
+    } else {
+        sort = "";
+    }
+
+    if(req.body.keys) {
+        var reqKeyString = req.body.keys;
+        var keys = reqKeyString;//reqKeyString.split(" ");
+    }
 
     // Keys and or date
     if(keys && req.body.startdate && req.body.enddate) {
-     Records.find({test_date: orm.between(req.body.startdate,req.body.enddate),
-                    or: [{ diagnosis: orm.like(keys) }, { description: orm.like(keys) }]}).order(sortVar).all(function(err,records){
-            res.render('search/index',{records: records});
-         });
+        fullTextSearch(keys,findBetweenKeys,res,req,sort);
     } else if(keys && req.body.startdate) {
-     Records.find({test_date: orm.gt(req.body.startdate),
-                    or: [{ diagnosis: orm.like(keys) }, { description: orm.like(keys) }]}).order(sortVar).all(function(err,records){
-            res.render('search/index',{records: records});
-         });
+        fullTextSearch(keys,findGreaterThanKeys,res,req,sort);
     } else if(keys && req.body.enddate) {
-     Records.find({test_date: orm.lt(req.body.enddate),
-                    or: [{ diagnosis: orm.like(keys) }, { description: orm.like(keys) }]}).order(sortVar).all(function(err,records){
-            res.render('search/index',{records: records});
-         });
+        fullTextSearch(keys,findLessThanKeys,res,req,sort);
     } else if(req.body.startdate && req.body.enddate){
-        // no key search
-     Records.find({test_date: orm.between(req.body.startdate,req.body.enddate)}).order(sortVar).all(function(err,records){
-            res.render('search/index',{records: records});
-         });
+        findBetweenNoKeys(null,res,req,sort);
     } else if(req.body.startdate){
-        // no key search
-     Records.find({test_date: orm.gt(req.body.startdate)}).order(sortVar).all(function(err,records){
-            res.render('search/index',{records: records});
-         });
+        findGreatThanNoKeys(null,res,req,sort);
     } else if(req.body.enddate){
-        // no key search
-     Records.find({test_date: orm.lt(req.body.enddate)}).order(sortVar).all(function(err,records){
-            res.render('search/index',{records: records});
-         });
+        findLessThanNoKeys(null,res,req,sort);
     } else if(keys){
-        // no key search
-     Records.find({ or: [{ diagnosis: orm.like(keys) }, { description: orm.like(keys) }]}).order(sortVar).all(function(err,records){
-            res.render('search/index',{records: records});
-         });
+        fullTextSearch(keys,findKeysOnly,res,req,sort);
     } else {
-        Records.all().order(sortVar).all(function(err,records){
-            console.log('<img alt="sample" src="data:image/png;base64,' + records[0].images.thumbnail + '">');
+         if(sort == '') {
+               Records.all(function(err,records){
             res.render('search/index',{records: records});
-         });
+        });
+         } else {
+        Records.find().order(sort).all(function(err,records){
+            res.render('search/index',{records: records});
+        });
+         }
     }
-    } else {
-        // DEFAULT SORT
-           var sortAlg = function(record1,record2){ 
-            var date1 = new Date(record1.test_date);
-            var date2 = new Date(record2.test_date);
-            if(type == 'ascending') {
-        return date1 < date2;
-            } else if(type == 'descending') {
-        return date1 > date2;
-            }};
+};
 
 
-    // Keys and or date
-    if(keys && req.body.startdate && req.body.enddate) {
-     Records.find({test_date: orm.between(req.body.startdate,req.body.enddate),
-                    or: [{ diagnosis: orm.like(keys) }, { description: orm.like(keys) }]}).each().sort(sortAlg).get(function(records){
-            res.render('search/index',{records: records});
-         });
-    } else if(keys && req.body.startdate) {
-     Records.find({test_date: orm.gt(req.body.startdate),
-                    or: [{ diagnosis: orm.like(keys) }, { description: orm.like(keys) }]}).each().sort(sortAlg).get(function(records){
-            res.render('search/index',{records: records});
-         });
-    } else if(keys && req.body.enddate) {
-     Records.find({test_date: orm.lt(req.body.enddate),
-                    or: [{ diagnosis: orm.like(keys) }, { description: orm.like(keys) }]}).each().sort(sortAlg).get(function(records){
-            res.render('search/index',{records: records});
-         });
-    } else if(req.body.startdate && req.body.enddate){
-        // no key search
-     Records.find({test_date: orm.between(req.body.startdate,req.body.enddate)}).each().sort(sortAlg).get(function(records){
-            res.render('search/index',{records: records});
-         });
-    } else if(req.body.startdate){
-        // no key search
-     Records.find({test_date: orm.gt(req.body.startdate)}).each().sort(sortAlg).get(function(records){
-            res.render('search/index',{records: records});
-         });
-    } else if(req.body.enddate){
-        // no key search
-     Records.find({test_date: orm.lt(req.body.enddate)}).each().sort(sortAlg).get(function(records){
-            res.render('search/index',{records: records});
-         });
-    } else if(keys){
-        // no key search
-     Records.find({ or: [{ diagnosis: orm.like(keys) }, { description: orm.like(keys) }]}).each().sort(sortAlg).get(function(records){
-            res.render('search/index',{records: records});
-         });
+var findLessThanKeys =  function(array,res,req,sort) {
+    if(sort == '') {
+        Records.find({record_id:array, test_date: orm.lt(req.body.enddate)},function(err,records){
+            // IF sort is default
+            records = reorder(array,records);
+            res.render('search/index',{records:records});
+        });
     } else {
-        Records.all().each().sort(sortAlg).get(function(records){
-            res.render('search/index',{records: records});
-         });
+        Records.find({record_id:array, test_date: orm.lt(req.body.enddate)}).order(sort).all(function(err,records){
+            res.render('search/index',{records:records});
+        });
     }
+}
 
+
+
+var findGreaterThanKeys =  function(array,res,req,sort) {
+
+    if(sort == '') {
+        Records.find({record_id:array, test_date: orm.gt(req.body.startdate)},function(err,records){
+            // IF sort is default
+            records = reorder(array,records);
+            res.render('search/index',{records:records});
+        });
+    } else {
+        Records.find({record_id:array, test_date: orm.gt(req.body.startdate)}).order(sort).all(function(err,records){
+            res.render('search/index',{records:records});
+        });
     }
-    };
+}
+
+
+var findBetweenKeys = function(array,res,req,sort) {
+    if(sort == '') {
+        Records.find({record_id:array, test_date: orm.between(req.body.startdate,req.body.enddate)},function(err,records){
+            // IF sort is default
+            records = reorder(array,records);
+            res.render('search/index',{records:records});
+        });
+    } else {
+        Records.find({record_id:array, test_date: orm.between(req.body.startdate,req.body.enddate)}).order(sort).all(function(err,records){
+            res.render('search/index',{records:records});
+        });
+    }
+};
+
+
+var findLessThanNoKeys =  function(array,res,req,sort) {
+
+    if(sort == '') {
+        Records.find({test_date: orm.lt(req.body.enddate)},function(err,records){
+            res.render('search/index',{records:records});
+        });
+    } else {
+        Records.find({test_date: orm.lt(req.body.enddate)}).order(sort).all(function(err,records){
+            res.render('search/index',{records:records});
+        });
+    }
+}
+
+
+
+var findGreaterThanNoKeys =  function(array,res,req,sort) {
+
+
+    if(sort == '') {
+        Records.find({test_date: orm.gt(req.body.startdate)},function(err,records){
+            res.render('search/index',{records:records});
+        });
+    } else {
+        Records.find({test_date: orm.gt(req.body.startdate)}).order(sort).all(function(err,records){
+            res.render('search/index',{records:records});
+        });
+    }
+}
+
+var findBetweenNoKeys = function(array,res,req,sort) {
+
+    if(sort == '') {
+        Records.find({test_date: orm.between(req.body.startdate,req.body.enddate)},function(err,records){
+            res.render('search/index',{records:records});
+        });
+    } else {
+        Records.find({test_date: orm.between(req.body.startdate,req.body.enddate)}).order(sort).all(function(err,records){
+            res.render('search/index',{records:records});
+        });
+    }
+}
+
+
+var findKeysOnly = function(array,res,req,sort) {
+    if(sort == '') {
+        Records.find({record_id:array},function(err,records){
+            // Find reorders them by id, so order by our array
+            // IF sort is default
+            if(sort == '')
+                records = reorder(array,records);
+
+        res.render('search/index',{records:records});
+        });
+    } else {
+        Records.find({record_id:array}).order(sort).all(function(err,records){
+            res.render('search/index',{records:records});
+        });
+    }}
+
+
+var fullTextSearch =  function(keys,findFunction,res,req,sort){orm.db.driver.execQuery("SELECT record.record_id, ((MATCH (persons.first_name,persons.last_name) AGAINST (?)) * 6 + (MATCH (record.diagnosis) AGAINST (?)) * 3 + (MATCH(record.description) AGAINST (?))) as score FROM persons INNER JOIN radiology_record record ON persons.person_id = record.patient_id WHERE MATCH (diagnosis,description) AGAINST (?) OR MATCH (first_name,last_name) AGAINST (?) ORDER BY score DESC;",
+        [keys, keys,keys,keys,keys],
+        function (err, data) {
+
+            // Get the Order of all the record_id's
+            var array = Array();
+            for(var i = 0; i < data.length; i ++) {
+                array.push(data[i].record_id);
+            }
+            findFunction(array,res,req,sort);
+        })
+};
+
+var reorder = function(array,records) {
+    var result = Array();
+
+    if(!records)
+        return result;
+
+    array.forEach(function(key) {
+        var found = false;
+        records = records.filter(function(item) {
+            if(!found && item.record_id == key) {
+                result.push(item);
+                found = true;
+                return false;
+            } else 
+            return true;
+        })
+    })
+    return result;
+}
