@@ -6,15 +6,6 @@ exports.index = function(req, res){
     res.render('search/index');
 };
 
-exports.sort = function(req, res) {
-    console.log("Sort called");
-    if(type == "ascending") {
-        return record1.test_date < record1.test_date;
-    } else if(type == "descedning") {
-        return record1.test_date < record1.test_date;
-    }
-};
-
 exports.post = function(req, res, next){
 
     // Get the keys

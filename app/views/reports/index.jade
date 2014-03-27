@@ -11,6 +11,10 @@ block content
                         label.col-sm-8.control-label(for="") Since Date
                         .col-sm-10
                         input#datetimepicker1.form-control(name='testdate',data-date-format="YYYY-MM-DD")
+                    .form-group 
+                        label.col-sm-8.control-label(for="") End Date
+                        .col-sm-10
+                        input#datetimepicker2.form-control(name='endtestdate',data-date-format="YYYY-MM-DD")
                     .form-group
                         label.col-sm-8.control-label(for="") Diagnosis
                         .col-sm-10
@@ -50,16 +54,18 @@ block content
                                 - if(person.records.length > 0)
                                        td #{person.records[0].test_date}
                                            input(type='hidden',value=person.records[0].test_date,name='testdate')
+                                - else 
+                                       td
                          -if(records)
                            each record, i in records                        
                             tr.form-group  
-                                td #{record.person.first_name}
+                                td #{record.patient.first_name}
                                     //-input(type='hidden',value=person.first_name,name='firstname')
-                                td #{record.person.last_name}
+                                td #{record.patient.last_name}
                                    //- input(type='hidden',value=person.last_name,name='lastname')
-                                td #{record.person.address}
+                                td #{record.patient.address}
                                     //-input(type='hidden',value=person.address,name='address')
-                                td #{record.person.phone}
+                                td #{record.patient.phone}
                                     //-input(type='hidden',value=person.phone,name='phone')
-                                td #{record.test_date}
+                                td #{prettyDate(record.test_date)}
                                     //-input(type='hidden',value=person.records[0].test_date,name='testdate')
