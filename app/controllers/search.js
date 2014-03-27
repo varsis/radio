@@ -52,16 +52,7 @@ exports.post = function(req, res, next){
     } else if(keys){
         fullTextSearch(keys,{record_id:null},res,sort);
     } else {
-        if(sort == '') {
-            Records.all(function(err,records){
-                console.log(records);
-                res.render('search/index',{records: records});
-            });
-        } else {
-            Records.find().order(sort).all(function(err,records){
-                res.render('search/index',{records: records});
-            });
-        }
+        fullTextSearch(keys,{},res,sort);
     }
 };
 
