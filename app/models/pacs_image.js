@@ -12,9 +12,6 @@ var pacs_image = db.define('pacs_images', {
     id   : ['record_id','image_id']
 } , {
   methods: {
-    example: function(){
-      // return example;
-    }
   }
 });
 

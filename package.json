@@ -15,7 +15,8 @@
     "pause": "0.0.1",
     "passport-strategy": "^1.0.0",
     "temp": "^0.7.0",
-    "gm": "^1.14.2"
+    "gm": "^1.14.2",
+    "orm-mysql-fts": "0.0.1"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

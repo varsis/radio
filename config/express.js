@@ -8,8 +8,17 @@ var User = db.models.users;
 var Person = db.models.persons;
 var Record = db.models.radiology_record;
 var FamilyDoctor = db.models.family_doctor;
+var Images = db.models.pacs_images;
 
 
+
+Images.hasOne('record', Record, { }, {
+    autoFetch: true,
+    reverse: 'images',
+    mergeTable: 'radiology_record',
+    field: 'record_id',
+    mergeAssocId: 'record_id'
+});
 
 Person.hasMany('users', User ,{
 }, {
@@ -28,7 +37,6 @@ Person.hasMany('records', Record, { }, {
     mergeId: 'patient_id',
     mergeAssocId: 'record_id'
 });
-
 
 Record.hasOne('person', Person, { }, {
     autoFetch: true,

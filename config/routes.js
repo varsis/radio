@@ -10,6 +10,10 @@ module.exports = function(app){
     var search = require('../app/controllers/search');
     var reports = require('../app/controllers/reports');
     var analysis = require('../app/controllers/analysis');
+    var images = require('../app/controllers/image');
+
+    var Image = db.models.pacs_images;
+
 
     // Check if the user is logged in other wise redirect user
 function loggedIn(req, res, next) {
@@ -77,4 +81,50 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
 
     app.get('/admin/reports', reports.index);
     app.post('/admin/reports/filter', reports.filter,reports.index);
+
+    app.param('recordid', function(req, res, next, id){
+            req.recid = id;
+            next();
+    });
+
+
+    app.param('imageid', function(req, res, next, id){
+
+        Image.find({image_id:id, record_id: req.recid},1, function(err,image){
+            if (err) throw err;
+            req.image = image[0];
+            next();
+        });
+    });
+
+
+    app.param('imageidView', function(req, res, next, id){
+        req.imageid = id;
+        next();
+    });
+
+
+    app.param('type', function(req, res, next, imageType){
+        var data;
+        if(imageType == 'thumbnail') {
+            data = (req.image).thumbnail;
+        } else if(imageType == 'regular') {
+            data = (req.image).regular_size;
+        } else if(imageType == 'full'){
+            data = (req.image).full_size;
+        }
+            req.imagedata = data;
+            next();
+
+    });
+
+    app.param('typeView', function(req, res, next, imageType){
+        req.imagetype = imageType;
+        next();
+
+    });
+
+
+    app.get('/img/:recordid/:imageid/:type',images.file);
+    app.get('/view/img/:recordid/:imageidView/:typeView',images.index);
 };

@@ -1,6 +1,14 @@
 extends ../layout
 
+
 block content 
+    -function prettyDate(date){
+    -var d = date.getDate();
+    -var m = date.getMonth();
+    -var y = date.getFullYear();
+    -return y+'-'+m+'-'+d;
+    -} 
+
         div
             div.col-md-3
             div.col-md-6.top-buffer
@@ -19,7 +27,14 @@ block content
                                     .col-sm-10
                                     input#datetimepicker2.form-control(name='enddate',data-date-format="YYYY-MM-DD")
                                 .form-group
-                                    label.col-sm-8.control-label(for="") Keywords
+                                    label.col-sm-8.control-label(for="") Sort Using
+                                    .col-sm-10
+                                    select.form-control.input-sm(name="sort")
+                                        option(value="default") Default
+                                        option(value="ascending") Date Ascending
+                                        option(value="descending") Date Descending
+                                .form-group
+                                    label.col-sm-8.control-label(for="") Keywords (Spaces between keys)
                                     .col-sm-10
                                     input.form-control(type="text", placeholder="", name="keys")
                                 .form-group
@@ -36,18 +51,44 @@ block content
                           table(class='table')
                             thead                             
                                     tr 
-                                        th First Name
-                                        th Last Name
-                                        th Address
-                                        th Phone
+                                        th Patient ID
+                                        th Doctor ID
+                                        th Radiologist ID 
+                                        th Test Type
+                                        th Prescribing Date
                                         th Test Date
+                                        th Diagnosis
+                                        th Description
 
                             tbody
                                    each record, i in records                        
                                     tr.form-group  
-                                        td #{record.person.first_name}
-                                        td #{record.person.last_name}
-                                        td #{record.person.address}
-                                        td #{record.person.phone}
-                                        td #{record.test_date}
+                                        td #{record.patient_id} RECORD ID #{record.record_id}
+                                        td #{record.doctor_id}
+                                        td #{record.radiologist_id}
+                                        td #{record.test_type}
+                                        td #{prettyDate(record.prescribing_date)}
+                                        td #{prettyDate(record.test_date)}
+                                        td #{record.diagnosis}
+                                        td #{record.description}
+                                        
+                                    tr
+                                        td(colspan="8")
+                                            for image, i in record.images
+                                                -if(i%4 == 0)
+                                                    div.row
+                                                     div.col-sm-4
+                                                        img(src="/img/"+image.record_id+"/"+image.image_id+"/"+"thumbnail");
+                                                        a(href="/view/img/"+image.record_id+"/"+image.image_id+"/"+"regular") Medium 
+                                                        a(href="/view/img/"+image.record_id+"/"+image.image_id+"/"+"full") Full Size 
+
+                                                -else 
+                                                     div.col-sm-4
+                                                        img(src="/img/"+image.record_id+"/"+image.image_id+"/"+"thumbnail");
+                                                        a(href="/view/img/"+image.record_id+"/"+image.image_id+"/"+"regular") Medium 
+                                                        a(href="/view/img/"+image.record_id+"/"+image.image_id+"/"+"full") Full Size 
+
+
+
+
 
