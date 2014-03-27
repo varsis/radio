@@ -18,7 +18,6 @@ exports.sort = function(req, res) {
 exports.post = function(req, res, next){
 
     // Get the keys
-
     // Sort type
     var sort = req.body.sort;
     if(sort != 'default') {
@@ -36,27 +35,28 @@ exports.post = function(req, res, next){
         var keys = reqKeyString;//reqKeyString.split(" ");
     }
 
+
     // Keys and or date
     if(keys && req.body.startdate && req.body.enddate) {
-        fullTextSearch(keys,{record_id:null, test_date: orm.between(req.body.startdate,req.body.enddate)},res,sort);
+        fullTextSearch(keys,{record_id:null, test_date: orm.between(req.body.startdate,req.body.enddate)},res,sort,req.user);
     } else if(keys && req.body.startdate) {
-        fullTextSearch(keys,{record_id:null, test_date: orm.gt(req.body.startdate)},res,sort);
+        fullTextSearch(keys,{record_id:null, test_date: orm.gt(req.body.startdate)},res,sort,req.user);
     } else if(keys && req.body.enddate) {
-        fullTextSearch(keys,{record_id:null, test_date: orm.lt(req.body.enddate)},res,sort);
+        fullTextSearch(keys,{record_id:null, test_date: orm.lt(req.body.enddate)},res,sort,req.user);
     } else if(req.body.startdate && req.body.enddate){
-        fullTextSearch(keys,{test_date: orm.between(req.body.startdate,req.body.enddate)},res,sort);       
+        fullTextSearch(keys,{test_date: orm.between(req.body.startdate,req.body.enddate)},res,sort,req.user);       
     } else if(req.body.startdate){
-        fullTextSearch(keys,{test_date: orm.gt(req.body.startdate)},res,sort);       
+        fullTextSearch(keys,{test_date: orm.gt(req.body.startdate)},res,sort,req.user);       
     } else if(req.body.enddate){
-        fullTextSearch(keys,{test_date: orm.lt(req.body.enddate)},res,sort);    
+        fullTextSearch(keys,{test_date: orm.lt(req.body.enddate)},res,sort,req.user);    
     } else if(keys){
-        fullTextSearch(keys,{record_id:null},res,sort);
+        fullTextSearch(keys,{record_id:null},res,sort,req.user);
     } else {
-        fullTextSearch(keys,{},res,sort);
+        fullTextSearch(keys,{},res,sort,req.user);
     }
 };
 
-var fullTextSearch =  function(keys,query,res,sort){
+var fullTextSearch =  function(keys,query,res,sort,user){
 
     if(keys) {
         orm.db.driver.execQuery("SELECT record.record_id, ((MATCH (persons.first_name,persons.last_name) AGAINST (?)) * 6 + (MATCH (record.diagnosis) AGAINST (?)) * 3 + (MATCH(record.description) AGAINST (?))) as score FROM persons INNER JOIN radiology_record record ON persons.person_id = record.patient_id WHERE MATCH (diagnosis,description) AGAINST (?) OR MATCH (first_name,last_name) AGAINST (?) ORDER BY score DESC;",
@@ -68,16 +68,38 @@ var fullTextSearch =  function(keys,query,res,sort){
                     for(var i = 0; i < data.length; i ++) {
                         array.push(data[i].record_id);
                     }
-
                     query.record_id = array;
-                    keySearch(array,query,res,sort);
+
+                    keySearch(array,query,res,sort,user);
                 })
     } else {
-        keySearch(null,query,res,sort);
+        keySearch(null,query,res,sort,user);
     }
 };
 
-var keySearch = function(array,query,res,sort) {
+var keySearch = function(array,query,res,sort,user) {
+
+    console.log(user);
+    var access = user.class;
+    if(access == 'a') {
+        // do nothing
+        // ADMIN
+    } else if(access == 'p') {
+        // patient
+        query.patient_id = user.person.person_id;
+    } else if(access == 'd') {
+        // doctor
+        query.doctor_id = user.person.person_id;
+    } else if(access == 'r') {
+        query.radiologist_id = user.person.person_id;
+    } else {
+        throw "Unknown user class";
+    }
+
+
+    console.log(query);
+
+
     if(sort == '') {
         Records.find(query,function(err,records){
             // IF sort is default
