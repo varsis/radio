@@ -77,7 +77,7 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
     app.post('/search', search.post);
 
     app.get('/admin/analysis', analysis.index);
-    app.post('/admin/analysis/update', analysis.update,analysis.index);
+    app.post('/admin/analysis/update', analysis.update);
 
     app.get('/admin/reports', reports.index);
     app.post('/admin/reports/filter', reports.filter,reports.index);

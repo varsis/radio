@@ -40,10 +40,10 @@ block content
 
                     tbody
                         form(action='/admin/analysis/update',method='post')
-                           each person, i in persons                        
-                            tr.form-group  
-                                td 
-                                //add image count thing
+                           each person, i in justdate
+                            each person.records, j in person                        
+                             tr.form-group  
+                                td #{person}
 
 
        -if (persons)
