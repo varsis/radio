@@ -30,17 +30,17 @@ exports.post = function(req, res, next){
     // Keys and or date
     if(keys && req.body.startdate && req.body.enddate) {
         fullTextSearch(keys,{record_id:null, test_date: orm.between(req.body.startdate,req.body.enddate)},res,sort,req.user);
-    } else if(keys && req.body.startdate) {
+    } else if(keys && req.body.startdate && !req.body.enddate) {
         fullTextSearch(keys,{record_id:null, test_date: orm.gt(req.body.startdate)},res,sort,req.user);
-    } else if(keys && req.body.enddate) {
+    } else if(keys && req.body.enddate && !req.body.startdate) {
         fullTextSearch(keys,{record_id:null, test_date: orm.lt(req.body.enddate)},res,sort,req.user);
-    } else if(req.body.startdate && req.body.enddate){
+    } else if(req.body.startdate && req.body.enddate && !keys){
         fullTextSearch(keys,{test_date: orm.between(req.body.startdate,req.body.enddate)},res,sort,req.user);       
-    } else if(req.body.startdate){
+    } else if(req.body.startdate && !keys && !req.body.enddate){
         fullTextSearch(keys,{test_date: orm.gt(req.body.startdate)},res,sort,req.user);       
-    } else if(req.body.enddate){
+    } else if(req.body.enddate && !keys && !req.body.startdate){
         fullTextSearch(keys,{test_date: orm.lt(req.body.enddate)},res,sort,req.user);    
-    } else if(keys){
+    } else if(keys && !req.body.startdate && !req.body.enddate){
         fullTextSearch(keys,{record_id:null},res,sort,req.user);
     } else {
         fullTextSearch(keys,{},res,sort,req.user);

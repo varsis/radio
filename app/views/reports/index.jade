@@ -51,21 +51,4 @@ block content
                                     input(type='hidden',value=person.address,name='address')
                                 td #{person.phone}
                                     input(type='hidden',value=person.phone,name='phone')
-                                - if(person.records.length > 0)
-                                       td #{person.records[0].test_date}
-                                           input(type='hidden',value=person.records[0].test_date,name='testdate')
-                                - else 
-                                       td
-                         -if(records)
-                           each record, i in records                        
-                            tr.form-group  
-                                td #{record.patient.first_name}
-                                    //-input(type='hidden',value=person.first_name,name='firstname')
-                                td #{record.patient.last_name}
-                                   //- input(type='hidden',value=person.last_name,name='lastname')
-                                td #{record.patient.address}
-                                    //-input(type='hidden',value=person.address,name='address')
-                                td #{record.patient.phone}
-                                    //-input(type='hidden',value=person.phone,name='phone')
-                                td #{prettyDate(record.test_date)}
-                                    //-input(type='hidden',value=person.records[0].test_date,name='testdate')
+                                td #{person.test_date} 
