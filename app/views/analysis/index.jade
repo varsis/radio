@@ -6,7 +6,7 @@ block content
             div.panel-heading 
                 h3.panel-title Analysis inputs
             div.panel-body
-                form(action='/admin/analysis/update',name="update",method='post',enctype="multipart/form-data",id="form-analysis")
+                form(action='/admin/analysis',name="update",method='post',enctype="multipart/form-data",id="form-analysis")
                     .form-group 
                         label.col-sm-8.control-label(for="") Greater Than Date
                         .col-sm-10
@@ -18,11 +18,11 @@ block content
                     .form-group
                         label.col-sm-8.control-label(for="") By test type
                         .col-sm-10
-                        input(type="checkbox", name="records")
+                        input(type="checkbox", name="withtype")
                     .form-group
                         label.col-sm-8.control-label(for="") By patient name
                         .col-sm-10
-                        input(type="checkbox", name="persons")
+                        input(type="checkbox", name="withname")
                     .form-group
                         .col-sm-offset-2.col-sm-10
                         button.btn.btn-primary(type='submit') Generate Analysis
@@ -36,17 +36,15 @@ block content
                   table(class='table')
                     thead                             
                             tr
-                                th Number of images
+                                th Number of records
 
                     tbody
-                        form(action='/admin/analysis/update',method='post')
-                           each person, i in justdate
-                            each person.records, j in person                        
+                        form(action='/admin/analysis/update',method='post')                       
                              tr.form-group  
-                                td #{person}
+                                td #{justdate}
 
 
-       -if (persons)
+       -if (withname)
         div(class='panel panel-primary top-buffer')
             div.panel-heading 
                 h3.panel-title Generated analysis              
@@ -57,7 +55,7 @@ block content
                             tr 
                                 th First Name
                                 th Last Name
-                                th Number of images
+                                th Number of records
 
                     tbody
                         form(action='/admin/analysis/update',method='post')
@@ -67,7 +65,7 @@ block content
                                 td #{person.last_name}
                                 //add image count thing
 
-       -if (records)
+       -if (withtype)
         div(class='panel panel-primary top-buffer')
             div.panel-heading 
                 h3.panel-title Generated analysis              
@@ -77,7 +75,7 @@ block content
                     thead                             
                             tr 
                                 th Test type
-                                th Number of images
+                                th Number of records
 
                     tbody
                         form(action='/admin/analysis/update',method='post')
@@ -87,7 +85,7 @@ block content
                                 //add image count thing
 
 
-       -if (personsrecords)
+       -if (withtypewithname)
         div(class='panel panel-primary top-buffer')
             div.panel-heading 
                 h3.panel-title Generated analysis              
@@ -99,7 +97,7 @@ block content
                                 th First Name
                                 th Last Name
                                 th Test type
-                                th Number of images
+                                th Number of records
 
                     tbody
                         form(action='/admin/analysis/update',method='post')

@@ -5,60 +5,39 @@ Record = db.models.radiology_record;
 
 exports.index = function(req, res){
 
- if(req.body.records && req.body.persons){
-        Person.all(function(err,persons) {
-                Record.all(function(err,records) {
-                    res.render('analysis/index',{personsrecords:persons});    
-        });
-        });
+                    res.render('analysis/index');    
     }
- else if(req.body.persons){
-        Person.all(function(err,persons) {
-                Record.all(function(err,records) {
-                    res.render('analysis/index',{persons:persons});    
-        });
-        });
-    }
- else if(req.body.records){
-        Person.all(function(err,persons) {
-                Record.all(function(err,records) {
-                    res.render('analysis/index',{records:persons});    
-        });
-        });
-    }
- else {
-        Person.all(function(err,persons) {
-                Record.all(function(err,records) {
-                    res.render('analysis/index',{justdate:persons});    
-        });
-      });
-    }
-}
 
-exports.update = function(req,res,next) {
+exports.update = function(req,res) {
 
  var query;
  query = {test_date: orm.between(req.body.startdate,req.body.enddate)};
 
- if(req.body.records && req.body.persons){
+ if(req.body.withtype && req.body.withname){
+       console.log("ITS IN THE both IF STATEMENT");
        Person.aggregate(['first_name'],query).count(['images']).groupBy('test_type').get(function(err,report){
-            res.render('analysis/index',{personsrecords:persons})
+            res.render('analysis/index',{withtypewithname:persons})
+            console.log("some stuff", report)
        });  
     }
- else if(req.body.persons){
-        Person.aggregate(['first_name'],query).count(['images']).groupBy('test_type').get(function(err,report){
-            res.render('analysis/index',{persons:persons})
+ else if(req.body.withname){
+    console.log("ITS IN THE name IF STATEMENT");
+        Person.aggregate(['first_name'],query).count(['images']).groupBy('person_id').get(function(err,report){
+            res.render('analysis/index',{withname:persons})
+            console.log("some stuff", report)
        });   
     }
- else if(req.body.records){
-       Person.aggregate(['first_name'],query).count(['images']).groupBy('test_type').get(function(err,report){
-            res.render('analysis/index',{records:persons})
+ else if(req.body.withtype){
+    console.log("ITS IN THE type IF STATEMENT");
+       Person.aggregate(['test_type'],query).count(['images']).groupBy('test_type').get(function(err,report){
+            res.render('analysis/index',{withtype:persons})
+            console.log("some stuff", report)
        });   
     }
  else {
-        Record.aggregate(query).count().get(function(err,report){
+        Record.count(query, function(err,report){
             console.log("some stuff", report);
-            //res.render('analysis/index',{justdate:persons})
+            res.render('analysis/index',{justdate:report})
        });  
     }
 
