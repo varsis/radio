@@ -28,10 +28,12 @@ var config = {
     app: {
       name: 'radiologyinformationsystem'
     },
-    port: 3000,
-  // db: 'mysql://checkte_391:pa$$word@varsisstudio.com/checkte_391'
-        db: 'mysql://test:test@localhost/rsi_dev'
+    port: 80,
+  // db: 'mysql://checkte_391:pa$$word@us-cdbr-azure-northcentral-a.cleardb.com/checkte_391'
+        db: 'mysql://radio:HAdxH4Ww@localhost/radio'
   }
 };
 
+
+//Database=radio;Data Source=us-cdbr-azure-northcentral-a.cleardb.com;User Id=b8e8de0ff6cbc7;Password=50357e27
 module.exports = config[env];
