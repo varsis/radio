@@ -66,12 +66,14 @@ block content
                 if (patientsDoctors.length>0){
                     for (i=0; i<patientsDoctors.length; i++)
                         doctorslist.options[i]=new Option(patientsDoctors[i].last_name + ", " + patientsDoctors[i].first_name,patientsDoctors[i].person_id);
+                        break;
                 } else {
-                        doctorslist.options[0] = new Option("There are no Doctors listed for this Patient","")
+                        doctorslist.options[0] = new Option("There are no Doctors listed for this Patient","");
+                        break;
                 }
 
                     
-                    }
+                }
             }
         }
               

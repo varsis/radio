@@ -28,9 +28,9 @@ var config = {
     app: {
       name: 'radiologyinformationsystem'
     },
-    port: 3000,
+    port: 80,
   // db: 'mysql://checkte_391:pa$$word@us-cdbr-azure-northcentral-a.cleardb.com/checkte_391'
-        db: 'mysql://b8e8de0ff6cbc7:50357e27@us-cdbr-azure-northcentral-a.cleardb.com/radio'
+        db: 'mysql://radio:HAdxH4Ww@localhost/radio'
   }
 };
 
