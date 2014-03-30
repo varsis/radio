@@ -100,10 +100,14 @@ block content
                                         input(type='hidden',value=user.user_name,name='username')
                                         button.btn.btn-primary.btn-sm(type='submit') Save
 
-                                td 
+                                td   
                                     form(action='/admin/user/remove',method='post')
                                         input(type='hidden',value=user.user_name,name='username')
-                                        button.btn.btn-danger.btn-sm.pull-right(type='submit') Remove
+                                        -if(user.user_name != 'admin')
+                                         button.btn.btn-danger.btn-sm.pull-right(type='submit') Remove
+                                        -else 
+                                         button.btn.btn-danger.btn-sm.pull-right(type='submit',disabled) Remove
+
 
 
                          form(action='/admin/user/add',method='post')

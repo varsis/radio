@@ -10,8 +10,6 @@ var Record = db.models.radiology_record;
 var FamilyDoctor = db.models.family_doctor;
 var Images = db.models.pacs_images;
 
-
-
 Images.hasOne('record', Record, { }, {
     autoFetch: true,
     reverse: 'images',
@@ -58,9 +56,6 @@ Record.hasOne('radiologist', Person, { }, {
     field: 'radiologist_id',
     mergeAssocId: 'person_id'
 });
-
-
-
 
 FamilyDoctor.hasOne('doctor_person', Person, {}, {
     autoFetch: true,

@@ -70,7 +70,6 @@ var fullTextSearch =  function(keys,query,res,sort,user){
 
 var keySearch = function(array,query,res,sort,user) {
 
-    console.log(user);
     var access = user.class;
     if(access == 'a') {
         // do nothing
@@ -88,15 +87,11 @@ var keySearch = function(array,query,res,sort,user) {
     }
 
 
-    console.log(query);
-
-
     if(sort == '') {
         Records.find(query,function(err,records){
             // IF sort is default
             if(array != null)
             records = reorder(array,records);
-
         res.render('search/index',{records:records});
         });
     } else {

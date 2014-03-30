@@ -27,19 +27,19 @@ var maxImageId ;
     Images.aggregate(["image_id"]).max("image_id").get(function (err, maxImage) {
         maxImageId = maxImage;
     });
-        Record.aggregate(["record_id"]).max("record_id").get(function (err, maxRec) {
-                    
+        Record.aggregate(["record_id"]).max("record_id").get(function (err, maxRec) {           
         Record.create([{
            record_id:   maxRec + 1,
-           patient_id:  req.body.patient,
-           doctor_id:   req.body.doctor,
-           radiologist_id: res.locals.user.person.person_id,
+           patient_id:  parseInt(req.body.patient),
+           doctor_id:   parseInt(req.body.doctor),
+           radiologist_id: res.locals.user.person_id,
            test_type:   req.body.testtype,
            prescribing_date: req.body.presdate,
            test_date:    req.body.testdate,
            diagnosis:   req.body.diagnosis, 
            description:   req.body.description }],  function (err, items) {
             if(err) throw (err);
+            console.log(items[0].patient_id,items[0].doctor_id,items[0].radiologist_id); 
         });
         
         if(req.files.images.path) {
@@ -58,6 +58,8 @@ var maxImageId ;
 
 // Resize images internal
 var resize = function(imageid,recordid,image) {
+            if(imageid == null)
+                imageid = 0;
 
                 gm(image.path).resize(250)
             .toBuffer(function (err, thumbnail) {
