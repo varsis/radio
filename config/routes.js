@@ -15,7 +15,6 @@ module.exports = function(app){
 
     var Image = db.models.pacs_images;
 
-
     // Check if the user is logged in other wise redirect user
 function loggedIn(req, res, next) {
 res.user = 'TEST';
@@ -86,44 +85,12 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
             req.recid = id;
             next();
     });
-
-
-    app.param('imageid', function(req, res, next, id){
-
-        Image.find({image_id:id, record_id: req.recid},1, function(err,image){
-            if (err) throw err;
-            req.image = image[0];
-            next();
-        });
-    });
-
-
-    app.param('imageidView', function(req, res, next, id){
-        req.imageid = id;
-        next();
-    });
-
-
-    app.param('type', function(req, res, next, imageType){
-        var data;
-        if(imageType == 'thumbnail') {
-            data = (req.image).thumbnail;
-        } else if(imageType == 'regular') {
-            data = (req.image).regular_size;
-        } else if(imageType == 'full'){
-            data = (req.image).full_size;
-        }
-            req.imagedata = data;
-            next();
-
-    });
-
+    app.param('imageid', images.getImage);
+    app.param('imageidView', images.getImageId);
+    app.param('type', images.imageType);
     app.param('typeView', function(req, res, next, imageType){
         req.imagetype = imageType;
-        next();
-
-    });
-
+        next();});
 
     app.get('/img/:recordid/:imageid/:type',images.file);
     app.get('/view/img/:recordid/:imageidView/:typeView',images.index);

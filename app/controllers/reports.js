@@ -3,43 +3,55 @@ var db = require('orm').db,
   Person = db.models.persons;
 Record = db.models.radiology_record;
 
+// Display report, or empty reports
 exports.index = function(req, res){
     if(res.locals.persons != undefined) {
             res.render('reports/index',{persons:res.locals.persons});
         } else {
-            res.render('reports/index',{persons:persons});	
+            res.render('reports/index');	
         }
 
 };
 
+// Filter the reports as needed
 exports.filter = function(req,res,next) {
     var query;
+    // above date
      if(req.body.testdate && !req.body.endtestdate) { 
         query = {test_date: orm.gte(req.body.testdate)};
+        // below date
      } else if(req.body.endtestdate  && !req.body.testdate) {
          query = {test_date: orm.lte(req.body.endtestdate)};
      }
+     // between two dates
      else if(req.body.testdate && req.body.endtestdate) {
             query = {test_date: orm.between(req.body.testdate,req.body.endtestdate)};
-     } else if(req.body.testdate && req.body.endtestdate && req.body.diagnosis) {
-         console.log(query);
-         query = {diagnosis: req.body.diagnosis, test_date: orm.between(req.body.testdate,req.body.endtestdate)};
+    // between two dates and with a diagnosis
      } else {
+         // No date
          query = {};
      }
 
-     console.log(query);
+     if(req.body.diagnosis)
+         query.diagnosis = req.body.diagnosis;
+
+     //console.log(query);
    
         Record.aggregate(['patient_id'],query).min(['test_date']).groupBy('patient_id').get(function(err,report) {
-            console.log(report);
+            //console.log(report);
             var recs = getRecordIds(report);
-            Person.find({ or: recs,}, function(err,records) {
+            if(report.length > 0) {
+            Person.find({ or: recs}, function(err,records) {
                 if(err) throw new Error(err);
                 pushDates(report,records);
-                console.log(records);
+                //console.log(records);
                 res.locals.persons = records;        
                 next();
             });
+            } else {
+                res.locals.persons = recs;
+                next();
+            }
 
     });
     }

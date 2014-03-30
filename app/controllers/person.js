@@ -3,10 +3,10 @@ var db = require('orm').db,
  FamilyDoctor = db.models.family_doctor;
 
 
+// add a person to the req
 exports.person_id = function(req,res,next,person_id) {
     Person.get(person_id,function(err,person){
 
-        // TODO: add functionality for ADMIN user(s).
          if(err && err.msg != 'Not found') {
              res.status(404);
              throw new Error(err);
@@ -16,6 +16,7 @@ exports.person_id = function(req,res,next,person_id) {
     });
 };
 
+// Update a person
 exports.update = function(req,res) {
     Person.get(req.body.personid, function (err, person) {
         if(req.body.firstname != '') {
@@ -37,7 +38,7 @@ exports.update = function(req,res) {
         }
 
         person.save(function (err) {
-            console.log('ERROR');
+            //console.log('ERROR');
             // err.msg = "under-age";
         });
      });
@@ -46,6 +47,7 @@ exports.update = function(req,res) {
 };
 
 
+// Add a person
 exports.add = function(req,res) {
 
 Person.aggregate(["person_id"]).max("person_id").get(function (err, max) {
@@ -64,6 +66,7 @@ Person.aggregate(["person_id"]).max("person_id").get(function (err, max) {
     res.redirect('/admin/users'); }) });
 }
 
+// add a doctor to a person
 exports.adddoc = function(req,res) {
 
     FamilyDoctor.create([ {
@@ -78,6 +81,7 @@ exports.adddoc = function(req,res) {
 
 }
 
+// Remove a doctor from a person
 exports.removedoc = function(req,res) {
 
     FamilyDoctor.find({ doctor_id: req.body.doctorid, patient_id: req.body.personid}).remove(function (err) {
