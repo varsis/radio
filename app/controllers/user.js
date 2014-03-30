@@ -1,3 +1,7 @@
+/*
+user module controller: renders the manage user page, handles adding and editing users as an admin
+*/
+
 var db = require('orm').db,
     Person = db.models.persons;
 var User = db.models.users;
