@@ -52,11 +52,9 @@ var dateFormat;
 }
 
 var fixKeys = function(inArray) {
-
-
     var keys = ['a','b','c','d'];
     var outArray = [];
-    for(var i = 0; i < inArray.length; i++) {
+    for(var i in inArray) {
         var object = Object();
         for(var key in inArray[i]) {
             if(typeof inArray[i][key] != typeof fixKeys) {

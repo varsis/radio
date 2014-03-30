@@ -1,5 +1,6 @@
 var orm = require('orm'),
-    Records = orm.db.models.radiology_record;
+    Records = orm.db.models.radiology_record,
+    FamilyDoctor = orm.db.models.family_doctor;
 var fts = require("orm-mysql-fts");
 
 exports.index = function(req, res){
@@ -74,20 +75,36 @@ var keySearch = function(array,query,res,sort,user) {
     if(access == 'a') {
         // do nothing
         // ADMIN
+        findRecords(query,sort,array,res);
     } else if(access == 'p') {
         // patient
         query.patient_id = user.person.person_id;
+        findRecords(query,sort,array,res);
     } else if(access == 'd') {
         // doctor
-        query.doctor_id = user.person.person_id;
+        //query.doctor_id = user.person.person_id;
+        FamilyDoctor.find({doctor_id:user.person.person_id},function(err,patients) {
+            console.log(patients);
+            var patientIds = [];
+            for(index in patients) {
+               patientIds.push(patients[index].patient_id);
+            }
+            query.patient_id = patientIds;
+            console.log(query);
+            findRecords(query,sort,array,res);
+        });
     } else if(access == 'r') {
         query.radiologist_id = user.person.person_id;
+        findRecords(query,sort,array,res);
     } else {
         throw "Unknown user class";
     }
+    
+    
+};
 
-
-    if(sort == '') {
+var findRecords = function(query,sort,array,res) {
+        if(sort == '') {
         Records.find(query,function(err,records){
             // IF sort is default
             if(array != null)
@@ -99,7 +116,7 @@ var keySearch = function(array,query,res,sort,user) {
             res.render('search/index',{records:records});
         });
     }
-};
+}
 
 var reorder = function(array,records) {
     var result = Array();
