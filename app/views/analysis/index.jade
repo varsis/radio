@@ -1,109 +1,53 @@
 extends ../layout
 
 block content 
-    div.row.top-buffer
+ div.row
+    div.col-sm-4
+    div.col-sm-4.top-buffer
         div(class='panel panel-primary')
             div.panel-heading 
                 h3.panel-title Analysis inputs
             div.panel-body
                 form(action='/admin/analysis',name="update",method='post',enctype="multipart/form-data",id="form-analysis")
                     .form-group 
-                        label.col-sm-8.control-label(for="") Greater Than Date
+                        label.col-sm-8.control-label(for="") Group Dates By
                         .col-sm-10
-                        input#datetimepicker1.form-control(name='startdate',data-date-format="YYYY-MM-DD")
-                    .form-group 
-                        label.col-sm-8.control-label(for="") Less Than Date
-                        .col-sm-10
-                        input#datetimepicker2.form-control(name='enddate',data-date-format="YYYY-MM-DD")
+                        select.form-control.input-sm(name="date")
+                            option(value="daily") Daily
+                            option(value="weekly") Weekly
+                            option(value="monthly") Monthly
+                            option(value="yearly") Yearly
                     .form-group
-                        label.col-sm-8.control-label(for="") By test type
+                        label.col-sm-8.control-label(for="") Using Test Type
                         .col-sm-10
                         input(type="checkbox", name="withtype")
                     .form-group
-                        label.col-sm-8.control-label(for="") By patient name
+                        label.col-sm-8.control-label(for="") Using Patient
                         .col-sm-10
                         input(type="checkbox", name="withname")
                     .form-group
                         .col-sm-offset-2.col-sm-10
                         button.btn.btn-primary(type='submit') Generate Analysis
-
-       -if (justdate)
-        div(class='panel panel-primary top-buffer')
-            div.panel-heading 
-                h3.panel-title Generated analysis              
-            div.panel-body
-                div.table-responsive
-                  table(class='table')
-                    thead                             
-                            tr
-                                th Number of records
-
-                    tbody
-                        form(action='/admin/analysis/update',method='post')                       
-                             tr.form-group  
-                                td #{justdate}
-
-
-       -if (withname)
-        div(class='panel panel-primary top-buffer')
-            div.panel-heading 
-                h3.panel-title Generated analysis              
-            div.panel-body
-                div.table-responsive
-                  table(class='table')
-                    thead                             
+ div.row
+     div.col-sm-3
+     div.col-sm-6
+        -if (results)
+            div(class='panel panel-primary')
+                div.panel-heading 
+                    h3.panel-title Generated analysis              
+                div.panel-body
+                    div.table-responsive
+                    table(class='table')
+                        thead                             
                             tr 
-                                th First Name
-                                th Last Name
-                                th Number of records
-
-                    tbody
-                        form(action='/admin/analysis/update',method='post')
-                           each person, i in persons                        
-                            tr.form-group  
-                                td #{person.first_name}
-                                td #{person.last_name}
-                                //add image count thing
-
-       -if (withtype)
-        div(class='panel panel-primary top-buffer')
-            div.panel-heading 
-                h3.panel-title Generated analysis              
-            div.panel-body
-                div.table-responsive
-                  table(class='table')
-                    thead                             
-                            tr 
-                                th Test type
-                                th Number of records
-
-                    tbody
-                        form(action='/admin/analysis/update',method='post')
-                           each person, i in persons                        
-                            tr.form-group  
-                               // td #{person.record.test_type}
-                                //add image count thing
-
-
-       -if (withtypewithname)
-        div(class='panel panel-primary top-buffer')
-            div.panel-heading 
-                h3.panel-title Generated analysis              
-            div.panel-body
-                div.table-responsive
-                  table(class='table')
-                    thead                             
-                            tr 
-                                th First Name
-                                th Last Name
-                                th Test type
-                                th Number of records
-
-                    tbody
-                        form(action='/admin/analysis/update',method='post')
-                           each person, i in persons                        
-                            tr.form-group  
-                                td #{person.first_name}
-                                td #{person.last_name}
-                                td #{person.record.test_type}
-                                //add image count thingss
+                              -if(withname)
+                               th Patient Id
+                              -if(withtype)
+                               th Type
+                              th Date
+                              th Number of Images
+                            tbody
+                               each row in results
+                                tr.form-group 
+                                 each item in row 
+                                    td #{item}
