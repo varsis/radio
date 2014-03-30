@@ -1,3 +1,6 @@
+var db = require('orm').db;
+var Image = db.models.pacs_images;
+
 exports.file = function(req, res){
     res.send(req.imagedata);
 };
