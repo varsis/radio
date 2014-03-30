@@ -1,11 +1,9 @@
-<<<<<<< HEAD
 /*
 image module: loads images
 */
-=======
+
 var db = require('orm').db;
 var Image = db.models.pacs_images;
->>>>>>> f48452da9feb93fc0fcb56d1c7f61a374a309b6a
 
 exports.file = function(req, res){
     res.send(req.imagedata);
