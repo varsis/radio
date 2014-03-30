@@ -35,7 +35,7 @@ exports.update = function(req,res) {
        });   
     }
  else {
-        Record.images.count(query, function(err,report){
+        Record.count(query, function(err,report){
             console.log("some stuff", report);
             res.render('analysis/index',{justdate:report})
        });  
