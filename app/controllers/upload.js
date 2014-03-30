@@ -1,3 +1,7 @@
+/*
+Upload module controller: renders the upload page, handles adding records to the db, and resizes images
+*/
+
 var db = require('orm').db,
   Person = db.models.persons;
   Images = db.models.pacs_images;
@@ -15,13 +19,12 @@ exports.index = function(req, res){
         res.render('upload/index',{persons:persons, family_doctors:doctors});
         });
     });
- 
-
 };
 
+//add a record with images to Record and reload a new upload page
 exports.post = function(req,res) {
 
-    console.log(req.body);
+  //  console.log(req.body);
 
 var maxImageId ;
     Images.aggregate(["image_id"]).max("image_id").get(function (err, maxImage) {
@@ -39,9 +42,10 @@ var maxImageId ;
            diagnosis:   req.body.diagnosis, 
            description:   req.body.description }],  function (err, items) {
             if(err) throw (err);
-            console.log(items[0].patient_id,items[0].doctor_id,items[0].radiologist_id); 
+           // console.log(items[0].patient_id,items[0].doctor_id,items[0].radiologist_id); 
         });
         
+        //checks for resizing
         if(req.files.images.path) {
             var image = req.files.images;    
             resize(maxImageId,maxRec + 1, image);
