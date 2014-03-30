@@ -1,8 +1,13 @@
+/*
+search module controller: renders the search page, handles querying for results, handles sorting of results
+*/ 
+
 var orm = require('orm'),
     Records = orm.db.models.radiology_record,
     FamilyDoctor = orm.db.models.family_doctor;
 var fts = require("orm-mysql-fts");
 
+//renders the search page
 exports.index = function(req, res){
     res.render('search/index');
 };
@@ -48,6 +53,7 @@ exports.post = function(req, res, next){
     }
 };
 
+//query with default sorting function formula
 var fullTextSearch =  function(keys,query,res,sort,user){
 
     if(keys) {
@@ -69,6 +75,7 @@ var fullTextSearch =  function(keys,query,res,sort,user){
     }
 };
 
+//find records and check permissions of searches depending on account
 var keySearch = function(array,query,res,sort,user) {
 
     var access = user.class;
@@ -84,13 +91,13 @@ var keySearch = function(array,query,res,sort,user) {
         // doctor
         //query.doctor_id = user.person.person_id;
         FamilyDoctor.find({doctor_id:user.person.person_id},function(err,patients) {
-            console.log(patients);
+           // console.log(patients);
             var patientIds = [];
             for(index in patients) {
                patientIds.push(patients[index].patient_id);
             }
             query.patient_id = patientIds;
-            console.log(query);
+           // console.log(query);
             findRecords(query,sort,array,res);
         });
     } else if(access == 'r') {
@@ -118,6 +125,7 @@ var findRecords = function(query,sort,array,res) {
     }
 }
 
+//reorganizes results from the search 
 var reorder = function(array,records) {
     var result = Array();
 
