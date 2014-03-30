@@ -11,6 +11,7 @@ module.exports = function(app){
     var reports = require('../app/controllers/reports');
     var analysis = require('../app/controllers/analysis');
     var images = require('../app/controllers/image');
+    var help = require('../app/controllers/help');
 
     var Image = db.models.pacs_images;
 
@@ -51,6 +52,8 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
                                    failureRedirect: '/login',
                                    failureFlash: true }));
 
+    app.get('/help', help.index);
+
     app.get('/profile', user.profile, user.personInfo);
     app.post('/profile', user.updateProfile);
 
@@ -61,9 +64,6 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
 
     app.post('/admin/person/adddoc', person.adddoc);
     app.post('/admin/person/removedoc', person.removedoc);
-
-
-
 
   // app.param('username', user.username);
     app.post('/admin/user/update', user.update);

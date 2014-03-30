@@ -41,7 +41,6 @@ var dateFormat;
          //console.log(returned);
          res.render('analysis/index',{withtype:true, results:fixKeys(returned)});        
      });
-
     } else {
              orm.db.driver.execQuery("SELECT DATE_FORMAT(test_date,'"+dateFormat+"'),COUNT(image_id) FROM cube GROUP BY date_format(test_date,'"+dateFormat+"');",function(err,returned){
          console.log(returned);
