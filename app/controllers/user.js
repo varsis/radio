@@ -175,3 +175,12 @@ exports.isAdmin = function(req,res,next) {
             res.render('user/unauthorized');
         }
 };
+
+exports.isRadio = function(req,res,next) {
+        var user = req.user;
+        if(user.class == 'r') {
+            next();
+        } else {
+            res.render('user/unauthorized');
+        }
+};

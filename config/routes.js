@@ -38,7 +38,7 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
 
     // CHECK IF ADMIN
     app.all('/admin*',user.isAdmin);
-
+    app.all('/radio*',user.isRadio);
 
     // We can use something like this for checking path
     //app.all('/path/*', authAdmin);
@@ -71,8 +71,8 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
     app.post('/admin/user/add', user.add);
     app.post('/admin/user/remove', user.remove);
 
-    app.get('/upload', upload.index);
-    app.post('/upload', upload.post);
+    app.get('/radio/upload', upload.index);
+    app.post('/radio/upload', upload.post);
     app.get('/search', search.index);
     app.post('/search', search.post);
 
