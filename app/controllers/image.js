@@ -1,3 +1,7 @@
+/*
+image module: loads images
+*/
+
 exports.file = function(req, res){
     res.send(req.imagedata);
 };
