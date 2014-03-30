@@ -8,8 +8,6 @@ exports.index = function(req, res){
 
 exports.showAll = function(req, res){
     Person.all(function(err,persons) {
-        console.log(persons[1].users);
-
         res.render('user/list',{persons: persons});
     });
 };
@@ -75,7 +73,6 @@ if(req.body.username.length > 0 && req.body.password.length > 0 && req.body.clas
 exports.remove = function(req,res){
     User.find({ user_name: req.body.username}).remove(function (err) {
         if(err) throw (err);
-        console.log(req.body.username);
     // err - description of the error or null
     // items - array of inserted items
     res.redirect('/admin/users');
@@ -129,7 +126,6 @@ exports.update = function(req,res) {
     User.get(req.body.username, function (err, user) {
     // finds person with id = 123
         if(req.body.password != '') {
-            console.log(req.body.password);
             user.password = req.body.password;
         }
 
@@ -156,12 +152,10 @@ exports.personInfo = function(req,res) {
 
      person.getDoctors(function (err, doctors) {
         if (err) throw err;
-        console.log(doctors);
                 });
 
           person.getRecords(function (err, records) {
         if (err) throw err;
-        console.log(records);
                 });
 
          if(err && err.msg != 'Not found') {
@@ -176,7 +170,6 @@ exports.personInfo = function(req,res) {
 exports.isAdmin = function(req,res,next) {
         var user = req.user;
         if(user.class == 'a') {
-            console.log("%s class",user.class);
             next();
         } else {
             res.render('user/unauthorized');

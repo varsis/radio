@@ -10,7 +10,7 @@ exports.index = function(req, res){
 exports.update = function(req,res) {
 
 // Create a table holding needed data.
-  orm.db.driver.execQuery("DROP TABLE cube; CREATE TABLE cube as SELECT radiology_record.record_id,radiology_record.patient_id,pacs_images.image_id,radiology_record.test_type,radiology_record.test_date FROM radiology_record LEFT JOIN pacs_images ON radiology_record.record_id = pacs_images.record_id;",function(err,returnStuff){
+  orm.db.driver.execQuery("DROP VIEW cube; CREATE VIEW cube as SELECT radiology_record.record_id,radiology_record.patient_id,pacs_images.image_id,radiology_record.test_type,radiology_record.test_date FROM radiology_record LEFT JOIN pacs_images ON radiology_record.record_id = pacs_images.record_id;",function(err,returnStuff){
  
 var dateFormat;
 
