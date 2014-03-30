@@ -7,7 +7,7 @@ exports.index = function(req, res){
     if(res.locals.persons != undefined) {
             res.render('reports/index',{persons:res.locals.persons});
         } else {
-            res.render('reports/index',{persons:persons});	
+            res.render('reports/index');	
         }
 
 };
