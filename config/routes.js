@@ -13,7 +13,7 @@ module.exports = function(app){
     var images = require('../app/controllers/image');
     var help = require('../app/controllers/help');
 
-    var Image = db.models.pacs_images;
+
 
     // Check if the user is logged in other wise redirect user
 function loggedIn(req, res, next) {

@@ -57,7 +57,7 @@ var maxImageId ;
         }
         });
 
-        res.redirect('/upload');
+        res.redirect('/radio/upload');
 };
 
 // Resize images internal
