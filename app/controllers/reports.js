@@ -39,7 +39,7 @@ exports.filter = function(req,res,next) {
      if(req.body.diagnosis)
          query.diagnosis = req.body.diagnosis;
 
-     //console.log(query);
+     console.log(query);
    
         Record.aggregate(['patient_id'],query).min(['test_date']).groupBy('patient_id').get(function(err,report) {
             //console.log(report);

@@ -33,7 +33,7 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
        res.redirect('/login');
       } 
  }
-    
+   
     // Check for all paths if user is logged in.
     app.all('*', loggedIn);
 
@@ -51,7 +51,7 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
     //app.post('/login', login.login);
     app.post('/login', passport.authenticate('local', { successRedirect: '/',
                                    failureRedirect: '/login',
-                                   failureFlash: true }));
+                                   failureFlash: false }));
 
     app.get('/help', help.index);
 

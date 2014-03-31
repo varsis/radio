@@ -106,7 +106,6 @@ module.exports = function(app, config) {
             done(null, user);
         });
 
-
         app.use(express.cookieParser() );
         app.use(express.session({
             secret  : "H83GH8DKLS22239",
@@ -124,6 +123,10 @@ module.exports = function(app, config) {
 
         app.use(app.router);
 
+        app.use(function(err, req, res, next){
+            console.error(err);
+            res.render('500',err);
+        });
 
         app.use(function(req, res) {
             res.status(404).render('404', { title: '404' });
