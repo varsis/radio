@@ -14,6 +14,8 @@ exports.index = function(req, res){
     res.render('image/index',{imageid: req.imageid, imagetype:req.imagetype, recordid:req.recid});
 };
 
+// Finds the Image in the database
+// Adds it to the Request and calls the next function
 exports.getImage = function(req, res, next, id){
 
         Image.find({image_id:id, record_id: req.recid},1, function(err,image){
@@ -23,11 +25,16 @@ exports.getImage = function(req, res, next, id){
         });
     };
 
+// Gets the image id from "path"
+// Adds it to the request
+// Next Function is called
 exports.getImageId = function(req, res, next, id){
         req.imageid = id;
         next();
     };
 
+// Checks what type of image we are trying to load
+// Calls next once we add it to the request
 exports.imageType = function(req, res, next, imageType){
         var data;
         if(imageType == 'thumbnail') {

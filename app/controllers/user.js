@@ -87,6 +87,7 @@ exports.update = function(req,res) {
 
 };
 
+// Checks if the user is an admin, used for the /admin directory check
 exports.isAdmin = function(req,res,next) {
     var user = req.user;
     if(user.class == 'a') {
@@ -96,6 +97,7 @@ exports.isAdmin = function(req,res,next) {
     }
 };
 
+// Checks if the user is a radiologist, for the /radio path
 exports.isRadio = function(req,res,next) {
     var user = req.user;
     if(user.class == 'r') {

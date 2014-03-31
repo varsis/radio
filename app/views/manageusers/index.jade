@@ -93,7 +93,7 @@ block content
                                         select.form-control.input-sm(name="class")
                                             - var options = [{value: 'a', label: 'Admin'}, {value: 'd', label: 'Doctor'}, {value: 'p', label: 'Patient'}, {value: 'r', label: 'Radiologist'}]
                                             each option in options
-                                                option(value=option.value, selected=(user.class==option.value))= option.label 
+                                                option(value=option.value, selected=(user.class==option.value),disabled)= option.label 
                                     td(colspan="3") 
                                         input.form-control.input-sm(type="text", placeholder=user.date_registered, name="dateregistered") 
                                     td(width="40")

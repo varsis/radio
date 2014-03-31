@@ -11,6 +11,7 @@ var FamilyDoctor = db.models.family_doctor;
 var Images = db.models.pacs_images;
 
 // Model Relations
+// Each image is associated with one record
 Images.hasOne('record', Record, { }, {
     autoFetch: true,
     reverse: 'images',
@@ -19,6 +20,7 @@ Images.hasOne('record', Record, { }, {
     mergeAssocId: 'record_id'
 });
 
+// Each person has many user accounts
 Person.hasMany('users', User ,{
 }, {
     autoFetch: true,
@@ -29,6 +31,7 @@ Person.hasMany('users', User ,{
 
 });
 
+// Each person has many records
 Person.hasMany('records', Record, { }, {
     autoFetch: true,
     autoSave: true,
@@ -37,6 +40,7 @@ Person.hasMany('records', Record, { }, {
     mergeAssocId: 'record_id'
 });
 
+// Each record is associated with one person
 Record.hasOne('patient', Person, { }, {
     autoFetch: true,
     mergeTable: 'persons',
@@ -44,13 +48,14 @@ Record.hasOne('patient', Person, { }, {
     mergeAssocId: 'person_id'
 });
 
+// Each record is assocaited with one doctor
 Record.hasOne('doctor', Person, { }, {
     autoFetch: true,
     mergeTable: 'persons',
     field: 'doctor_id',
     mergeAssocId: 'person_id'
 });
-
+// Each record is assocaited with one Radiologist
 Record.hasOne('radiologist', Person, { }, {
     autoFetch: true,
     mergeTable: 'persons',
@@ -58,6 +63,7 @@ Record.hasOne('radiologist', Person, { }, {
     mergeAssocId: 'person_id'
 });
 
+// Each Family doctor is assocaited with a person by the id
 FamilyDoctor.hasOne('doctor_person', Person, {}, {
     autoFetch: true,
     mergeTable: 'persons',
@@ -65,6 +71,7 @@ FamilyDoctor.hasOne('doctor_person', Person, {}, {
     mergeAssocId: 'person_id'
 });
 
+// Each user is assocaited with a Person
 User.hasOne('person', Person, {}, {
     autoFetch: true,
     mergeTable: 'persons',
@@ -86,10 +93,12 @@ module.exports = function(app, config) {
         app.use(express.bodyParser());
         app.use(express.methodOverride());
 
+        // Deserialize a User
         passport.deserializeUser(function(user, done) {
             done(null, user);
         });
 
+       // Checking if valid user
         passport.use(new LocalStrategy(
                 function(username, passwordin, done) {
                     User.find({user_name: username, password: passwordin} ,
@@ -102,20 +111,28 @@ module.exports = function(app, config) {
                 }
                 ));
 
+        // Serialize the user
         passport.serializeUser(function(user, done) {
             done(null, user);
         });
 
-
+        // How to get cookie back
         app.use(express.cookieParser() );
+
+        // Tell Express to use sessions
         app.use(express.session({
             secret  : "H83GH8DKLS22239",
-            maxAge  : new Date(Date.now() + 3600000), //1 Hour
-            expires : new Date(Date.now() + 3600000) //1 Hour
+            maxAge  : new Date(Date.now() + 3600000), 
+            expires : new Date(Date.now() + 3600000) 
         }));
+
+        // Start the Passport Module
         app.use(passport.initialize());
+
+        // Tell passport we are using sessions
         app.use(passport.session());
 
+        // Everytime we call a page add the user into the response.
         app.use(function(req, res, next){
             res.locals.user = req.session.passport.user;
             res.locals.path = req.path;
@@ -124,7 +141,14 @@ module.exports = function(app, config) {
 
         app.use(app.router);
 
+        // Server error handle
+        app.use(function(err, req, res, next){
+            console.error(err);
+            res.render('500',err);
+        });
 
+
+        // Missing Page handle
         app.use(function(req, res) {
             res.status(404).render('404', { title: '404' });
         });
