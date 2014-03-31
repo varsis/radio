@@ -27,6 +27,8 @@ exports.update = function(req,res) {
                             break;
             case 'yearly': dateFormat = '%Y';
                            break;
+            case 'none': dateFormat = '';
+                         break;
         }
 
         // By type and patient
