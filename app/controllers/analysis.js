@@ -1,3 +1,7 @@
+/*
+analysis module controller: renders analysis page, deals with the view cube, handles by date, type or name queries
+*/
+
 var db = require('orm').db,
     orm = require('orm'),
     Cube = db.models.cube;
