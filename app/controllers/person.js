@@ -8,6 +8,7 @@ var db = require('orm').db,
 
 
 // add a person to the req
+// Calls the next function
 exports.person_id = function(req,res,next,person_id) {
     Person.get(person_id,function(err,person){
 
@@ -49,7 +50,7 @@ exports.update = function(req,res) {
 };
 
 
-// Add a person
+// Add a person to the database with data from our form
 exports.add = function(req,res) {
 
     Person.aggregate(["person_id"]).max("person_id").get(function (err, max) {
@@ -68,7 +69,7 @@ exports.add = function(req,res) {
                 res.redirect('/admin/users'); }) });
 }
 
-// add a doctor to a person
+// add a doctor to a person in the database
 exports.adddoc = function(req,res) {
 
     FamilyDoctor.create([ {
@@ -83,7 +84,7 @@ exports.adddoc = function(req,res) {
 
 }
 
-// Remove a doctor from a person
+// Remove a doctor from a person in the database
 exports.removedoc = function(req,res) {
 
     FamilyDoctor.find({ doctor_id: req.body.doctorid, patient_id: req.body.personid}).remove(function (err) {
