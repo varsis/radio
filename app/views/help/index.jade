@@ -1,6 +1,14 @@
 extends ../layout
 
-block content 
+block content
+    div.row
+        div.col-sm-3
+        div.col-sm-6.top-buffer
+            div(class='panel panel-primary')
+                div.panel-heading 
+                    h3.panel-title Installation Guide
+                div.panel-body
+                    a(href="UserDocumentation.pdf") Install Guide (PDF)  
     div.row
         div.col-sm-3
         div.col-sm-6.top-buffer
@@ -64,3 +72,5 @@ block content
                 div.panel-body
                     img(src='anaylsis.png',width=520)
                     In this module you can choose to display the number of images for each patient ,  test type, and/or period of time. In order to do this you must be logged in as an administrator account. Then click on the analysis tab at the top of the page. Here you will see check boxes to control and how you want to see the number of images by, as well as the dates (such as daily, monthly, yearly). To see the analysis of the number of images press the generate analysis button at the bottom.
+
+
