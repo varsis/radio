@@ -1,3 +1,7 @@
+/*
+person class: handles changes to persons, such as adding, updating information and modifying doctors of the person
+*/
+
 var db = require('orm').db,
  Person = db.models.persons,
  FamilyDoctor = db.models.family_doctor;
