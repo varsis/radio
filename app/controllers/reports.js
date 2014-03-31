@@ -1,3 +1,7 @@
+/*
+reports module controller: renders reports page, handles finding reports as needed from the user input
+*/
+
 var db = require('orm').db,
      orm = require('orm'),
   Person = db.models.persons;
