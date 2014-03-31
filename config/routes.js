@@ -5,6 +5,7 @@ module.exports = function(app){
 	var home = require('../app/controllers/home');
     var login = require('../app/controllers/login');
     var user = require('../app/controllers/user');
+    var manageusers = require('../app/controllers/manageusers');
     var person = require('../app/controllers/person');
     var upload = require('../app/controllers/upload');
     var search = require('../app/controllers/search');
@@ -12,6 +13,7 @@ module.exports = function(app){
     var analysis = require('../app/controllers/analysis');
     var images = require('../app/controllers/image');
     var help = require('../app/controllers/help');
+    var profile = require('../app/controllers/profile');
 
 
 
@@ -53,8 +55,8 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
 
     app.get('/help', help.index);
 
-    app.get('/profile', user.profile, user.personInfo);
-    app.post('/profile', user.updateProfile);
+    app.get('/profile', profile.getInfo, profile.index);
+    app.post('/profile', profile.updateProfile);
 
     // Update the person profile
     app.param('person_id', person.person_id);
@@ -66,7 +68,7 @@ if(req.session.passport.user !== undefined && req.path == '/login') {
 
   // app.param('username', user.username);
     app.post('/admin/user/update', user.update);
-     app.get('/admin/users', user.showAll);
+     app.get('/admin/users', manageusers.index);
     app.post('/admin/user/add', user.add);
     app.post('/admin/user/remove', user.remove);
 

@@ -151,7 +151,7 @@ block content
                         select.form-control.input-sm(name='doctorid')
                             each doctor, i in persons
                                 - if(doctor.person_id != person.person_id)
-                                        option(value=doctor.person_id) #{doctor.last_name}, #{doctor.first_name}
+                                         option(value=doctor.person_id) #{doctor.last_name}, #{doctor.first_name}
                     div.col-sm-2
                         input(type='hidden', value=person.person_id,name="personid")
                         button.btn.btn-success.btn-sm(type='submit') Add Doctor to Patient

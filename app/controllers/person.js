@@ -1,18 +1,18 @@
 var db = require('orm').db,
- Person = db.models.persons,
- FamilyDoctor = db.models.family_doctor;
+    Person = db.models.persons,
+    FamilyDoctor = db.models.family_doctor;
 
 
 // add a person to the req
 exports.person_id = function(req,res,next,person_id) {
     Person.get(person_id,function(err,person){
 
-         if(err && err.msg != 'Not found') {
-             res.status(404);
-             throw new Error(err);
-         } 
-            req.person = person; 
-            next();
+        if(err && err.msg != 'Not found') {
+            res.status(404);
+            throw new Error(err);
+        } 
+        req.person = person; 
+        next();
     });
 };
 
@@ -29,41 +29,39 @@ exports.update = function(req,res) {
             person.address= req.body.address;
         }
 
-       if(req.body.email != '') {
+        if(req.body.email != '') {
             person.email = req.body.email;
         }
 
-       if(req.body.phone != '') {
+        if(req.body.phone != '') {
             person.phone = req.body.phone;
         }
 
         person.save(function (err) {
-            //console.log('ERROR');
-            // err.msg = "under-age";
+            res.redirect('/admin/users');
         });
-     });
+    });
 
-    res.redirect('/admin/users');
 };
 
 
 // Add a person
 exports.add = function(req,res) {
 
-Person.aggregate(["person_id"]).max("person_id").get(function (err, max) {
-    Person.create([
-    {
-        person_id: max + 1,
-        first_name: req.body.firstname,
-        last_name: req.body.lastname,
-        address: req.body.address,
-        email: req.body.email,
-        phone: req.body.phone
-    }], function (err, items) {
-        if(err) throw (err);
-    // err - description of the error or null
-    // items - array of inserted items
-    res.redirect('/admin/users'); }) });
+    Person.aggregate(["person_id"]).max("person_id").get(function (err, max) {
+        Person.create([
+            {
+                person_id: max + 1,
+            first_name: req.body.firstname,
+            last_name: req.body.lastname,
+            address: req.body.address,
+            email: req.body.email,
+            phone: req.body.phone
+            }], function (err, items) {
+                if(err) throw (err);
+                // err - description of the error or null
+                // items - array of inserted items
+                res.redirect('/admin/users'); }) });
 }
 
 // add a doctor to a person
@@ -71,12 +69,12 @@ exports.adddoc = function(req,res) {
 
     FamilyDoctor.create([ {
         doctor_id: req.body.doctorid,
-        patient_id: req.body.personid
+    patient_id: req.body.personid
     }], function (err, items) {
         if(err) throw (err);
-    // err - description of the error or null
-    // items - array of inserted items
-    res.redirect('/admin/users');
+        // err - description of the error or null
+        // items - array of inserted items
+        res.redirect('/admin/users');
     }) 
 
 }
@@ -86,9 +84,9 @@ exports.removedoc = function(req,res) {
 
     FamilyDoctor.find({ doctor_id: req.body.doctorid, patient_id: req.body.personid}).remove(function (err) {
         if(err) throw (err);
-    // err - description of the error or null
-    // items - array of inserted items
-    res.redirect('/admin/users');
+        // err - description of the error or null
+        // items - array of inserted items
+        res.redirect('/admin/users');
     }) 
 
 }
