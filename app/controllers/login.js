@@ -15,6 +15,6 @@ exports.index = function(req, res){
 //session handling and rendering logout
 exports.logout = function(req,res) {
     req.session.destroy();
-    res.render('login/logout'); d
+    res.render('login/logout'); 
     res.redirect('/');
 };
