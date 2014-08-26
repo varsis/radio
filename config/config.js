@@ -9,7 +9,7 @@ var config = {
       name: 'radiologyinformationsystem'
     },
     port: 3000,
-  // db: 'mysql://checkte_391:pa$$word@varsisstudio.com/checkte_391'
+
         db: 'mysql://test:test@localhost/rsi_dev'
   },
 
@@ -18,8 +18,7 @@ var config = {
     app: {
       name: 'radiologyinformationsystem'
     },
-    port: 3000,
-  // db: 'mysql://checkte_391:pa$$word@varsisstudio.com/checkte_391'
+
         db: 'mysql://test:test@localhost/rsi_dev'
   },
 
@@ -29,7 +28,7 @@ var config = {
       name: 'radiologyinformationsystem'
     },
     port: 80,
-  // db: 'mysql://checkte_391:pa$$word@us-cdbr-azure-northcentral-a.cleardb.com/checkte_391'
+
         db: 'mysql://radio:HAdxH4Ww@localhost/radio'
   }
 };
